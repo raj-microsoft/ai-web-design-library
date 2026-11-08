@@ -7,160 +7,286 @@
 <meta name="description" content="Everything shared in Raj's Instagram DMs on building better sites and cleaner animations - searchable, organized, ready to use.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a0a0f; --bg2:#101018; --card:#14141d; --card2:#1a1a26;
-  --line:#26263a; --text:#e8e8f0; --dim:#9a9ab0; --faint:#66667e;
-  --accent:#7c6cff; --accent2:#38bdf8;
-  --spring:cubic-bezier(.34,1.56,.64,1);
+  --bg:#0a0a0b;
+  --raise:#101013;
+  --card:rgba(255,255,255,.022);
+  --card-hover:rgba(255,255,255,.045);
+  --line:rgba(255,255,255,.075);
+  --line-soft:rgba(255,255,255,.045);
+  --text:#f1f0ea;
+  --dim:#a2a19a;
+  --faint:#63625c;
+  --accent:#c9bcff;
+  --accent-ink:#7c6cff;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --spring:cubic-bezier(.34,1.4,.5,1);
   --ease:cubic-bezier(.22,1,.36,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  background:var(--bg); color:var(--text);
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
-  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
 }
-::selection{background:rgba(124,108,255,.35)}
-.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;
+::selection{background:rgba(201,188,255,.28)}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:3px;border-radius:4px}
+
+/* ---------- backdrop ---------- */
+.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-fx::before{content:'';position:absolute;inset:0;
   background:
-    radial-gradient(900px 500px at 15% -5%, rgba(124,108,255,.14), transparent 60%),
-    radial-gradient(800px 500px at 90% 10%, rgba(56,189,248,.10), transparent 60%),
-    radial-gradient(700px 600px at 50% 110%, rgba(124,108,255,.07), transparent 60%);
+    radial-gradient(1000px 560px at 12% -8%, rgba(124,108,255,.13), transparent 62%),
+    radial-gradient(900px 620px at 96% 4%, rgba(56,189,248,.08), transparent 60%),
+    radial-gradient(900px 800px at 50% 118%, rgba(124,108,255,.06), transparent 62%);
 }
-.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px}
+.bg-grid{position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse 90% 62% at 50% 0%, #000 30%, transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 62% at 50% 0%, #000 30%, transparent 78%);
+}
+.bg-noise{position:absolute;inset:0;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+}
+.aurora{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;will-change:transform}
+.aurora.a{width:520px;height:520px;left:-160px;top:-120px;background:radial-gradient(circle,rgba(124,108,255,.20),transparent 65%);animation:drift1 26s ease-in-out infinite alternate}
+.aurora.b{width:460px;height:460px;right:-140px;top:8%;background:radial-gradient(circle,rgba(56,189,248,.12),transparent 65%);animation:drift2 32s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(70px,46px) scale(1.08)}}
+@keyframes drift2{to{transform:translate(-64px,60px) scale(1.12)}}
 
-/* hero */
-.hero{padding:88px 0 40px;text-align:center}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
-  border:1px solid var(--line);border-radius:999px;padding:7px 16px;background:rgba(20,20,29,.7);backdrop-filter:blur(8px)}
-.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 12px var(--accent2)}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(38px,6vw,68px);font-weight:700;line-height:1.04;margin:26px 0 18px;letter-spacing:-.02em}
-.hero h1 .grad{background:linear-gradient(100deg,#a99bff 0%,#7c6cff 40%,#38bdf8 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{max-width:620px;margin:0 auto;color:var(--dim);font-size:17px;line-height:1.65}
-.stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:34px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 22px;min-width:118px;
-  transition:transform .35s var(--spring), border-color .25s var(--ease)}
-.stat:hover{transform:translateY(-3px);border-color:#3a3a58}
-.stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700}
-.stat span{font-size:12.5px;color:var(--faint);letter-spacing:.04em}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
 
-/* controls */
-.controls{position:sticky;top:0;z-index:20;padding:14px 0;background:linear-gradient(to bottom, rgba(10,10,15,.92), rgba(10,10,15,.78));backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
-.controls.scrolled{border-bottom-color:var(--line)}
-.search-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.search{flex:1;min-width:240px;position:relative}
-.search input{width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;color:var(--text);
-  font:inherit;font-size:15px;padding:12px 16px 12px 42px;outline:none;transition:border-color .2s, box-shadow .2s}
-.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,108,255,.18)}
-.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.5}
-.search kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:2px 7px;background:var(--bg2)}
+/* ---------- hero ---------- */
+.hero{padding:clamp(72px,11vh,128px) 0 clamp(36px,5vh,56px)}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+  border:1px solid var(--line);border-radius:999px;padding:8px 16px;background:rgba(16,16,19,.6);backdrop-filter:blur(10px)}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 10px rgba(52,211,153,.8);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+.hero h1{
+  margin:28px 0 0;
+  font-family:var(--sans);font-weight:600;letter-spacing:-.045em;line-height:.98;
+  font-size:clamp(46px,8.2vw,104px);
+}
+.hero h1 .row{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
+.hero h1 .row>span{display:inline-block;transform:translateY(110%);animation:rise 1s var(--ease) forwards}
+.hero h1 .row:nth-child(2)>span{animation-delay:.09s}
+@keyframes rise{to{transform:translateY(0)}}
+.hero h1 em{
+  font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.015em;
+  background:linear-gradient(100deg,#fff 20%,var(--accent) 75%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  padding-right:.06em;
+}
+.hero p.sub{
+  margin-top:26px;max-width:560px;color:var(--dim);
+  font-size:clamp(15px,1.6vw,17px);line-height:1.65;
+  opacity:0;animation:fadeUp .9s var(--ease) .28s forwards;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.stats{
+  margin-top:clamp(36px,5vh,56px);
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  opacity:0;animation:fadeUp .9s var(--ease) .42s forwards;
+}
+.stat{padding:22px 20px 20px 0;border-right:1px solid var(--line-soft)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:var(--mono);font-weight:500;font-size:clamp(24px,3vw,34px);letter-spacing:-.02em}
+.stat span{display:block;margin-top:6px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- toolbar ---------- */
+.controls{position:sticky;top:0;z-index:50;margin:0 calc(-1*clamp(20px,4vw,48px));padding:14px clamp(20px,4vw,48px);
+  transition:background .35s,border-color .35s,backdrop-filter .35s;border-bottom:1px solid transparent}
+.controls.scrolled{background:rgba(10,10,11,.78);backdrop-filter:blur(16px) saturate(1.3);border-bottom-color:var(--line-soft)}
+.search-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.search{flex:1 1 300px;display:flex;align-items:center;gap:11px;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 16px;height:48px;
+  transition:border-color .25s,background .25s,box-shadow .25s}
+.search:focus-within{border-color:rgba(201,188,255,.4);background:var(--card-hover);box-shadow:0 0 0 4px rgba(124,108,255,.09)}
+.search svg{flex:none;opacity:.65}
+.search input{flex:1;background:none;border:0;outline:0;color:var(--text);font:15px var(--sans);height:100%}
+.search input::placeholder{color:var(--faint)}
+.search kbd{font-family:var(--mono);font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:rgba(255,255,255,.03)}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{font:inherit;font-size:13.5px;font-weight:500;color:var(--dim);background:var(--card);border:1px solid var(--line);
-  border-radius:999px;padding:9px 16px;cursor:pointer;transition:all .25s var(--ease)}
-.chip:hover{color:var(--text);border-color:#3a3a58;transform:translateY(-1px)}
-.chip.active{color:#0a0a0f;background:var(--text);border-color:var(--text)}
-.chip .n{opacity:.55;font-size:12px;margin-left:5px}
+.chip{display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  font:500 13px var(--sans);color:var(--dim);
+  background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 16px;
+  transition:all .28s var(--spring)}
+.chip .n{font-family:var(--mono);font-size:10.5px;color:var(--faint);border:1px solid var(--line-soft);border-radius:999px;padding:1px 7px;transition:all .28s}
+.chip .cdot{width:6px;height:6px;border-radius:50%;background:var(--ca,#888)}
+.chip:hover{color:var(--text);border-color:rgba(255,255,255,.16);transform:translateY(-1px)}
+.chip.active{background:var(--text);color:#0a0a0b;border-color:var(--text)}
+.chip.active .n{color:#0a0a0b;border-color:rgba(0,0,0,.2)}
 
-/* grid */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:28px 0 90px}
-.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;cursor:pointer;overflow:hidden;
-  opacity:0;transform:translateY(18px);
-  transition:transform .35s var(--spring), border-color .25s var(--ease), box-shadow .3s var(--ease), opacity .5s var(--ease)}
-.card.shown{opacity:1;transform:translateY(0)}
-.card:hover{transform:translateY(-4px);border-color:#40406a;box-shadow:0 18px 40px -18px rgba(0,0,0,.7)}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ca,#7c6cff);opacity:.85}
-.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
-.card .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);border:1px solid var(--line);border-radius:8px;padding:3px 8px;background:var(--bg2)}
-.tag{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ca,#7c6cff);background:color-mix(in srgb, var(--ca,#7c6cff) 12%, transparent);border-radius:999px;padding:4px 10px}
-.card h3{font-family:'Space Grotesk',sans-serif;font-size:18.5px;font-weight:600;line-height:1.28;margin-bottom:8px;letter-spacing:-.01em}
-.card p{font-size:14px;line-height:1.6;color:var(--dim)}
-.card .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
-.card .from{font-size:12px;color:var(--faint)}
-.card .open{font-size:13px;font-weight:600;color:var(--ca,#7c6cff);display:flex;align-items:center;gap:5px}
-.card.hidden{display:none}
-.empty{display:none;text-align:center;padding:70px 0;color:var(--faint);font-size:15px}
-
-/* modal */
-.overlay{position:fixed;inset:0;z-index:50;background:rgba(6,6,10,.72);backdrop-filter:blur(10px);
-  display:flex;align-items:flex-start;justify-content:center;padding:5vh 18px;
-  opacity:0;pointer-events:none;transition:opacity .28s var(--ease)}
-.overlay.open{opacity:1;pointer-events:auto}
-.modal{background:var(--bg2);border:1px solid var(--line);border-radius:22px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;
-  transform:translateY(26px) scale(.985);transition:transform .38s var(--spring);box-shadow:0 40px 90px -30px rgba(0,0,0,.8)}
-.overlay.open .modal{transform:translateY(0) scale(1)}
-.modal-head{position:sticky;top:0;background:linear-gradient(to bottom, var(--bg2) 78%, transparent);padding:26px 30px 18px;z-index:2}
-.modal-head .tag{margin-bottom:12px;display:inline-block}
-.modal-head h2{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.015em;line-height:1.2;padding-right:44px}
-.modal-head .meta{margin-top:10px;font-size:13px;color:var(--faint);display:flex;gap:14px;flex-wrap:wrap}
-.modal-head .meta a{color:var(--accent2);text-decoration:none;word-break:break-all}
-.modal-head .meta a:hover{text-decoration:underline}
-.close{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--card);
-  color:var(--dim);font-size:17px;cursor:pointer;transition:all .2s;display:grid;place-items:center}
-.close:hover{color:var(--text);border-color:#40406a;transform:rotate(90deg)}
-.modal-body{padding:6px 30px 34px;font-size:15px;line-height:1.72;color:#c9c9da}
-.modal-body h1,.modal-body h2,.modal-body h3,.modal-body h4{font-family:'Space Grotesk',sans-serif;color:var(--text);margin:26px 0 10px;letter-spacing:-.01em;line-height:1.3}
-.modal-body h1{font-size:21px}.modal-body h2{font-size:19px}.modal-body h3{font-size:16.5px}
-.modal-body p{margin:10px 0}
-.modal-body ul,.modal-body ol{margin:10px 0 10px 22px}
-.modal-body li{margin:5px 0}
-.modal-body a{color:var(--accent2)}
-.modal-body strong{color:var(--text)}
-.modal-body blockquote{margin:16px 0;padding:12px 16px;border-left:3px solid var(--accent);background:rgba(124,108,255,.08);border-radius:0 10px 10px 0;color:#d5d5e8}
-.modal-body table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;display:block;overflow-x:auto}
-.modal-body th,.modal-body td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
-.modal-body th{background:var(--card);font-weight:600;color:var(--text)}
-.modal-body img{max-width:100%;border-radius:10px;margin:8px 0}
-.modal-body hr{border:none;border-top:1px solid var(--line);margin:22px 0}
-.modal-body code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
-.prompt-block{position:relative;margin:16px 0}
-.prompt-block pre{background:#0d0d15;border:1px solid var(--line);border-radius:14px;padding:18px;overflow-x:auto;
-  font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
-.prompt-block pre code{background:none;border:none;padding:0;font-size:inherit}
-.copy-btn{position:absolute;top:10px;right:10px;font:inherit;font-size:12px;font-weight:600;color:var(--dim);
-  background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;transition:all .2s;z-index:1}
-.copy-btn:hover{color:var(--text);border-color:var(--accent)}
-.copy-btn.done{color:#34d399;border-color:#34d399}
-
-footer{padding:36px 0 56px;text-align:center;color:var(--faint);font-size:13px;line-height:1.7;border-top:1px solid var(--line)}
-footer b{color:var(--dim);font-weight:600}
-
-@media (max-width:640px){
-  .hero{padding:56px 0 32px}
-  .stats{gap:10px}.stat{min-width:100px;padding:12px 16px}
-  .modal-head,.modal-body{padding-left:20px;padding-right:20px}
-  .search kbd{display:none}
+/* ---------- grid / cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:34px 0 8px}
+@media(max-width:1080px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:660px){.grid{grid-template-columns:1fr}}
+.card{
+  --ca:#8b7cff;
+  position:relative;display:flex;flex-direction:column;gap:14px;
+  padding:26px 26px 22px;border-radius:20px;cursor:pointer;
+  background:var(--card);border:1px solid var(--line);
+  transition:transform .4s var(--spring),border-color .3s,background .3s,box-shadow .4s;
+  opacity:0;transform:translateY(22px);
+  overflow:hidden;
 }
+.card.shown{opacity:1;transform:none;transition:transform .8s var(--ease),opacity .8s var(--ease),border-color .3s,background .3s,box-shadow .4s}
+.card.hidden{display:none}
+.card::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.06),transparent 65%);
+  opacity:0;transition:opacity .35s}
+.card:hover{transform:translateY(-4px);background:var(--card-hover);border-color:rgba(255,255,255,.15);
+  box-shadow:0 20px 48px -20px rgba(0,0,0,.6)}
+.card:hover::before{opacity:1}
+.card.featured{grid-column:span 2}
+@media(max-width:660px){.card.featured{grid-column:span 1}}
+.card .top{display:flex;align-items:center;justify-content:space-between}
+.card .num{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.08em}
+.card .tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  border:1px solid var(--line);border-radius:999px;padding:4px 11px}
+.card .tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--ca)}
+.card h3{font-size:19px;font-weight:600;letter-spacing:-.02em;line-height:1.28}
+.card.featured h3{font-size:clamp(21px,2.2vw,26px)}
+.card p{font-size:14px;line-height:1.6;color:var(--dim);flex:1}
+.card .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:16px;border-top:1px solid var(--line-soft)}
+.card .from{font-family:var(--mono);font-size:11px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .open{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--dim);transition:color .25s}
+.card .open .arr{display:inline-flex;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);align-items:center;justify-content:center;
+  transition:all .3s var(--spring)}
+.card:hover .open{color:var(--text)}
+.card:hover .open .arr{background:var(--text);color:#0a0a0b;border-color:var(--text);transform:rotate(-45deg)}
+.empty{display:none;text-align:center;padding:80px 20px;color:var(--faint);font-size:15px}
+.empty b{display:block;font-family:var(--serif);font-style:italic;font-weight:400;font-size:26px;color:var(--dim);margin-bottom:8px}
+
+/* ---------- footer ---------- */
+footer{margin:clamp(60px,9vh,110px) 0 56px;padding-top:30px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+footer .note{font-family:var(--mono);font-size:11.5px;line-height:1.8;color:var(--faint);letter-spacing:.02em}
+footer .start{display:inline-flex;align-items:center;gap:10px;cursor:pointer;background:none;
+  border:1px solid var(--line);border-radius:999px;padding:12px 22px;color:var(--text);
+  font:500 13.5px var(--sans);transition:all .3s var(--spring)}
+footer .start:hover{background:var(--text);color:#0a0a0b;border-color:var(--text);transform:translateY(-2px)}
+footer .start em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:15px}
+
+/* ---------- modal ---------- */
+.overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(6,6,8,.55);backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;transition:opacity .35s}
+.overlay.open{opacity:1;pointer-events:auto}
+@media(min-width:720px){.overlay{align-items:center;padding:40px 24px}}
+.modal{position:relative;width:100%;max-width:780px;height:min(88vh,940px);
+  background:#111114;border:1px solid var(--line);border-radius:24px 24px 0 0;
+  overflow-y:auto;overscroll-behavior:contain;
+  transform:translateY(48px) scale(.985);transition:transform .5s var(--spring);
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
+@media(min-width:720px){.modal{border-radius:24px}}
+.overlay.open .modal{transform:none}
+.modal::-webkit-scrollbar{width:8px}
+.modal::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:99px}
+.m-progress{position:sticky;top:0;z-index:6;height:2px;background:transparent}
+.m-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent-ink),var(--accent));transition:width .12s linear}
+.modal-head{position:sticky;top:2px;z-index:5;padding:26px 30px 20px;
+  background:linear-gradient(#111114 78%,rgba(17,17,20,0));
+ }
+.modal-head .row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.m-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+  border:1px solid var(--line);border-radius:999px;padding:5px 13px}
+.m-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--ca,#8b7cff)}
+.modal h2{margin-top:16px;font-size:clamp(23px,3vw,30px);font-weight:600;letter-spacing:-.025em;line-height:1.18}
+.m-meta{margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.m-meta a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(201,188,255,.3);transition:border-color .25s}
+.m-meta a:hover{border-bottom-color:var(--accent)}
+.close{flex:none;width:38px;height:38px;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--dim);font-size:19px;line-height:1;
+  transition:all .3s var(--spring)}
+.close:hover{background:var(--text);color:#0a0a0b;border-color:var(--text);transform:rotate(90deg)}
+.modal-body{padding:6px 30px 56px;font-size:15.5px;line-height:1.72;color:#cfcec7}
+.modal-body h1{font-size:21px;font-weight:600;letter-spacing:-.02em;color:var(--text);margin:34px 0 12px}
+.modal-body h2{font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--text);margin:32px 0 10px}
+.modal-body h3{font-size:16.5px;font-weight:600;letter-spacing:-.01em;color:var(--text);margin:28px 0 8px}
+.modal-body p{margin:12px 0}
+.modal-body strong{color:var(--text);font-weight:600}
+.modal-body ul,.modal-body ol{margin:12px 0 12px 4px;padding-left:20px}
+.modal-body li{margin:7px 0}
+.modal-body li::marker{color:var(--faint)}
+.modal-body a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(201,188,255,.3)}
+.modal-body a:hover{border-bottom-color:var(--accent)}
+.modal-body blockquote{
+  margin:20px 0;padding:16px 20px;border-radius:14px;
+  background:rgba(124,108,255,.07);border:1px solid rgba(124,108,255,.18);
+  color:#ddd9f5;font-size:14.5px}
+.modal-body blockquote p{margin:0}
+.modal-body img{max-width:100%;border-radius:14px;border:1px solid var(--line);margin:14px 0}
+.modal-body table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+.modal-body th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+  text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+.modal-body td{padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+.modal-body tr:hover td{background:rgba(255,255,255,.02)}
+.prompt-block{position:relative;margin:20px 0;border-radius:16px;overflow:hidden;
+  background:#0b0b0e;border:1px solid var(--line)}
+.prompt-block pre{padding:20px 18px 18px;overflow-x:auto;
+  font:13px/1.65 var(--mono);color:#d8d7f0;white-space:pre-wrap;word-break:break-word}
+.prompt-block .copy-btn{position:absolute;top:10px;right:10px;cursor:pointer;
+  font:500 11px var(--mono);letter-spacing:.05em;color:var(--dim);
+  background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;padding:6px 12px;
+  backdrop-filter:blur(6px);transition:all .25s}
+.prompt-block .copy-btn:hover{color:var(--text);background:rgba(255,255,255,.12)}
+.prompt-block .copy-btn.done{color:#0a0a0b;background:#34d399;border-color:#34d399}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:28px;z-index:200;
+  transform:translate(-50%,16px);opacity:0;pointer-events:none;
+  display:flex;align-items:center;gap:9px;
+  background:#1a1a1f;border:1px solid var(--line);border-radius:999px;padding:11px 20px;
+  font:500 13px var(--sans);color:var(--text);box-shadow:0 16px 40px -12px rgba(0,0,0,.7);
+  transition:transform .45s var(--spring),opacity .3s}
+.toast.show{transform:translate(-50%,0);opacity:1}
+.toast .tick{color:#34d399;font-size:14px}
+
 @media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{transition:none!important;animation:none!important}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
   html{scroll-behavior:auto}
   .card{opacity:1;transform:none}
 }
 </style>
 </head>
 <body>
-<div class="bg-fx"></div>
+<div class="bg-fx"><div class="bg-grid"></div><div class="aurora a"></div><div class="aurora b"></div><div class="bg-noise"></div></div>
 <div class="wrap">
 
   <header class="hero">
     <span class="eyebrow"><span class="dot"></span>From the Instagram DMs &middot; Jan&ndash;Nov 2026</span>
-    <h1>The AI Web Design<br><span class="grad">Library</span></h1>
-    <p>Every guide, tool and community shared in your DMs this year, on one question: how to make AI-built websites and videos look expensive. Search it, filter it, steal the prompts.</p>
+    <h1>
+      <span class="row"><span>The AI Web Design</span></span>
+      <span class="row"><span><em>Library.</em></span></span>
+    </h1>
+    <p class="sub">Every guide, tool and community shared in your DMs this year, on one question: how to make AI-built websites and videos look expensive. Search it, filter it, open a card and steal the prompt.</p>
     <div class="stats">
-      <div class="stat"><b>128</b><span>DM threads scanned</span></div>
-      <div class="stat"><b>94</b><span>conversations read</span></div>
-      <div class="stat"><b>18</b><span>links opened</span></div>
-      <div class="stat"><b>15</b><span>resources saved</span></div>
+      <div class="stat"><b data-count="128">0</b><span>DM threads scanned</span></div>
+      <div class="stat"><b data-count="94">0</b><span>conversations read</span></div>
+      <div class="stat"><b data-count="18">0</b><span>links opened</span></div>
+      <div class="stat"><b data-count="15">0</b><span>resources saved</span></div>
     </div>
   </header>
 
   <div class="controls" id="controls">
     <div class="search-row">
       <div class="search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9a9ab0" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="q" type="text" placeholder="Search guides, tools, prompts..." autocomplete="off" spellcheck="false">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a2a19a" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="text" placeholder="Search guides, tools, prompts..." autocomplete="off" spellcheck="false" aria-label="Search the library">
         <kbd>/</kbd>
       </div>
       <div class="chips" id="chips"></div>
@@ -168,25 +294,33 @@ footer b{color:var(--dim);font-weight:600}
   </div>
 
   <main class="grid" id="grid"></main>
-  <div class="empty" id="empty">Nothing matches. Try a different search.</div>
+  <div class="empty" id="empty"><b>Nothing matches.</b>Try a different search or category.</div>
 
   <footer>
-    Collected 8 Nov 2026 from Instagram DMs &middot; every external link opened and read<br>
-    <b>Start with guide 01</b> - the 5 libraries to name in your prompts, plus the master prompt to paste into any build.
+    <div class="note">
+      Collected 8 Nov 2026 from Instagram DMs &middot; every external link opened and read<br>
+      Built as a single self-contained page &middot; press / to search
+    </div>
+    <button class="start" id="start-btn" type="button">Start with <em>guide 01</em> &rarr;</button>
   </footer>
 </div>
 
 <div class="overlay" id="overlay">
-  <div class="modal" role="dialog" aria-modal="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title">
+    <div class="m-progress"><i id="m-bar"></i></div>
     <div class="modal-head">
-      <button class="close" id="close" aria-label="Close">&times;</button>
-      <span class="tag" id="m-tag"></span>
+      <div class="row">
+        <span class="m-tag" id="m-tag"></span>
+        <button class="close" id="close" aria-label="Close">&times;</button>
+      </div>
       <h2 id="m-title"></h2>
-      <div class="meta" id="m-meta"></div>
+      <div class="m-meta" id="m-meta"></div>
     </div>
     <div class="modal-body" id="m-body"></div>
   </div>
 </div>
+
+<div class="toast" id="toast"><span class="tick">&#10003;</span>Prompt copied to clipboard</div>
 
 <script>
 const DATA = [{"id": "01", "cat": "Guides", "title": "The 5 Sites That Make AI-Built Websites Look Expensive", "summary": "The core reference: Anime.js, Motion, Magic UI, shadcn/ui and Manus - name the library in your prompt and AI stops hand-writing animation. Includes the master prompt.", "senders": "Sebastian Hardy", "source": "https://docs.google.com/document/d/1xJX5V0UXEMwu66qwL_fqStcUP1p40SHbK1NN3at2djc/export?format=txt", "html": "<p>Four free libraries plus one AI builder. By the end of this you will know exactly which one to point Claude at, and the exact sentence to paste so it uses them properly.<\/p>\n<h3>Why AI-built sites look cheap<\/h3>\n<p>The real problem: when you ask an AI to build a site, it writes animation from scratch. Hand-rolled animation is where it falls apart, and that is what makes a page feel amateur. The fix is not a better prompt. It is telling the AI which established library to use, so it stops inventing motion and starts calling code that professionals already built.<\/p>\n<blockquote>\n<p><strong>THE KEY INSIGHT<\/strong> - Name the library in your prompt. That single change does more for how your site looks than any amount of describing the design you want, because the AI stops guessing and starts using a real toolkit.<\/p>\n<\/blockquote>\n<h3>1. Anime.js - the animation library<\/h3>\n<p>One free library with thousands of possible animations. 72,469 stars on GitHub, maintained for nine years. Use it for anything that moves on the page: counters, staggered text, SVG line drawing, elements sliding in as you scroll.<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Build this page and use Anime.js for all animation.\nDo not write custom keyframes. Stagger the hero text in on load.\n<\/code><\/pre><\/div>\n<h3>2. Motion - the transitions library<\/h3>\n<p>Formerly Framer Motion. 33,381 stars. This is the one for movement between states and between pages. Use it for the expensive feeling: page transitions, elements that morph between layouts, things that spring rather than slide.<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Use Motion (motion.dev) for every transition and state change.\nUse spring physics, not linear easing.\n<\/code><\/pre><\/div>\n<blockquote>\n<p><strong>PRO MOVE<\/strong> - Anime.js and Motion do overlapping jobs. Pick one per project and say so in your prompt. Loading both is the fastest way to a slow, conflicting mess.<\/p>\n<\/blockquote>\n<h3>3. Magic UI - the copy-paste components<\/h3>\n<p>Over 150 animated components you copy straight out of the browser and paste into your chat. 22,083 stars, MIT licensed, built on React and Tailwind. Use it for the pieces you would otherwise spend an hour describing: animated beams, marquees, number tickers, shimmer buttons, bento grids.<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Here is a component from Magic UI: [paste the code].\nUse it for the hero section and match the rest of the page to its style.\n<\/code><\/pre><\/div>\n<h3>4. shadcn/ui - the foundation<\/h3>\n<p>122,257 stars, and the base most good modern sites are built on now. You own the code because it copies components into your project rather than installing a black box. Use it for everything structural, plus dashboards: its chart section covers area, bar, line, pie and radar charts with animation built in.<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>npx shadcn@latest init\n<\/code><\/pre><\/div>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Build the dashboard using shadcn/ui charts.\nKeep the existing colour tokens. Do not add another chart library.\n<\/code><\/pre><\/div>\n<h3>5. Manus - when you want it built for you<\/h3>\n<p>Not a library. An AI agent that plans and builds the whole site while you do something else, then hands you the result. Use it for a first draft you then refine, or a client mockup you need before a call. Paid product with a free tier, unlike the four above.<\/p>\n<blockquote>\n<p><strong>BE REALISTIC<\/strong> - Agent builders are excellent at getting you to eighty percent fast and stubborn about the last twenty. Plan to take the output into your own editor to finish it, rather than fighting the agent for small changes.<\/p>\n<\/blockquote>\n<h3>The prompt that ties it together<\/h3>\n<p>This is the one to save. Paste it at the start of any build and fill in the brackets.<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Build [what you are building].\n\nStack: shadcn/ui for components and layout, Motion for all transitions\nand state changes, Anime.js for scroll and load animation.\n\nRules:\n- Use spring physics, never linear easing.\n- Animate on scroll into view, not all at once on load.\n- Keep every animation under 400ms.\n- Do not write custom keyframes when the library already does it.\n- Respect prefers-reduced-motion.\n\nStart with the hero section only. Show me that before you build the rest.\n<\/code><\/pre><\/div>\n<blockquote>\n<p><strong>PRO MOVE<\/strong> - That last line matters more than the rest. Building one section at a time and reviewing it beats generating a whole site and trying to fix it afterwards.<\/p>\n<\/blockquote>\n<h3>Common mistakes<\/h3>\n<ul>\n<li>Loading three animation libraries at once. Pick one and your page stays fast.<\/li>\n<li>Animating everything. If it all moves, nothing stands out. Choose two or three moments per page.<\/li>\n<li>Long animations. Anything over about 400 milliseconds feels sluggish, not smooth.<\/li>\n<li>Skipping prefers-reduced-motion. Some people get motion sick, and it is one line to respect.<\/li>\n<li>Copying a component without checking the licence. All four here are MIT, so you are fine - check anything else.<\/li>\n<\/ul>\n<h3>Your first week<\/h3>\n<ol>\n<li><strong>Day 1:<\/strong> run the shadcn/ui init on a throwaway project. Get the foundation in place first.<\/li>\n<li><strong>Day 2:<\/strong> add Motion and animate one page transition. One thing, done well.<\/li>\n<li><strong>Day 3:<\/strong> browse Magic UI and paste one component in. Pick the hero - the highest-impact section.<\/li>\n<li><strong>Day 4:<\/strong> add scroll animation with Anime.js. Two or three moments, not ten.<\/li>\n<li><strong>Day 5:<\/strong> save the master prompt above with your own defaults filled in. This is the asset you keep.<\/li>\n<\/ol>\n<h3>Resources<\/h3>\n<ul>\n<li><a href=\"https://animejs.com\">Anime.js<\/a> - 72,469 stars, MIT<\/li>\n<li><a href=\"https://github.com/juliangarnier/anime\">Anime.js on GitHub<\/a><\/li>\n<li><a href=\"https://motion.dev\">Motion<\/a> - 33,381 stars, MIT<\/li>\n<li><a href=\"https://magicui.design\">Magic UI<\/a> - 22,083 stars, MIT<\/li>\n<li><a href=\"https://ui.shadcn.com\">shadcn/ui<\/a> - 122,257 stars, MIT<\/li>\n<li><a href=\"https://manus.im\">Manus<\/a> - the AI builder<\/li>\n<\/ul>"}, {"id": "02", "cat": "Guides", "title": "Build a $10K Website in Claude Code - Free Setup", "summary": "The 4-step setup (install, Framer Motion, design system, components) that turns Claude Code into a senior-level web designer.", "senders": "Chris Cordero", "source": "https://noocap.notion.site/Build-a-10K-Website-in-Claude-Code-Free-Setup-Guide-356508e99dda816c9d15ea892d4139f9", "html": "<p>Build a $10K Website in Claude Code — Free Setup Guide | Notion<\/p>\n<p>The exact 4-step setup to go from blank terminal to a polished, production-ready site — using Claude Code as your developer.<\/p>\n<h2>Why this works<\/h2>\n<p>You don't need a designer. You don't need a dev team. You need the right setup before you start prompting — because Claude Code is only as good as the environment, animations, design taste, and components you give it access to.<\/p>\n<p>This guide is the exact stack that turns Claude Code from a generic code generator into a senior-level web designer.<\/p>\n<h2>Step 1 — Install Claude Code<\/h2>\n<p>Claude Code runs locally on your machine through your terminal. One command and you're in.<\/p>\n<p>Install command:<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code class=\"language-bash\">npm install -g @anthropic-ai/claude-code\n\n<\/code><\/pre><\/div>\n<p>Then run:<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code class=\"language-bash\">claude\n\n<\/code><\/pre><\/div>\n<p>Requirements: Node.js 18+ installed. Sign in with your Anthropic account when prompted.<\/p>\n<p>Why this matters: Claude Code can read your full project, edit multiple files at once, run commands, and iterate — that's what makes it different from copy-pasting code from a chat window.<\/p>\n<h2>Step 2 — Add Animation Support (Framer Motion)<\/h2>\n<p>Default AI-generated sites look static and lifeless. Animation is the #1 thing that makes a site feel premium.<\/p>\n<p>Install Framer Motion:<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code class=\"language-bash\">npm install framer-motion\n\n<\/code><\/pre><\/div>\n<p>Then tell Claude Code in your project context:<\/p>"}, {"id": "03", "cat": "Guides", "title": "15 Free Google AI Tools", "summary": "Quick-reference table: Stitch for UI design, Opal, Antigravity IDE, NotebookLM, Jules, Gemini CLI and more. Reach for it when you need a free tool for a job.", "senders": "Amir Afridi + 2 more", "source": "https://forested-beet-e72.notion.site/List-of-Free-Google-AI-Tools-3a8a26434b34802e9ea6c4a2c714ef71?pvs=73", "html": "<p>List of Free Google AI Tools | Notion<\/p>\n<table>\n<thead>\n<tr>\n<th>Tool &amp; Link<\/th>\n<th>One-Liner Description<\/th>\n<th>Category<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>Pomelli<\/td>\n<td>Free AI marketing tool that builds your brand profile from your website and generates social content.<\/td>\n<td>AI Marketing<\/td>\n<\/tr>\n<tr>\n<td>Stitch<\/td>\n<td>Turns prompts, sketches, and wireframes into clean, modern UI designs and frontend code.<\/td>\n<td>AI UI Designer<\/td>\n<\/tr>\n<tr>\n<td>Opal<\/td>\n<td>Build no-code AI mini-apps and multi-step workflows with simple language, like a free n8n.<\/td>\n<td>No-Code Workflow Builder<\/td>\n<\/tr>\n<tr>\n<td>Antigravity<\/td>\n<td>The \"Cursor-Killer\" agentic IDE that builds full apps from text prompts.<\/td>\n<td>Agentic IDE<\/td>\n<\/tr>\n<tr>\n<td>Mixboard<\/td>\n<td>A mix of Canva and Pinterest where you generate and combine AI images into moodboards.<\/td>\n<td>AI Moodboard Tool<\/td>\n<\/tr>\n<tr>\n<td>Disco<\/td>\n<td>Turns your open browser tabs into interactive AI apps with an AI-enabled pointer.<\/td>\n<td>Web Discovery (Waitlist)<\/td>\n<\/tr>\n<tr>\n<td>NotebookLM<\/td>\n<td>Turns your docs, videos, and notes into summaries, podcasts, and study guides.<\/td>\n<td>Research Assistant<\/td>\n<\/tr>\n<tr>\n<td>Learn Your Way<\/td>\n<td>Turns any topic into a personalized, AI-built course.<\/td>\n<td>AI Learning Tool<\/td>\n<\/tr>\n<tr>\n<td>Flow Music<\/td>\n<td>Chat with an AI producer to generate full songs and music videos.<\/td>\n<td>AI Music Studio<\/td>\n<\/tr>\n<tr>\n<td>Google AI Studio<\/td>\n<td>The Lovable clone for prototyping MVPs and spinning up AI apps in seconds.<\/td>\n<td>Vibe Coder<\/td>\n<\/tr>\n<tr>\n<td>Jules<\/td>\n<td>An autonomous agent that connects to GitHub to build features and fix bugs.<\/td>\n<td>Autonomous Coding Agent<\/td>\n<\/tr>\n<tr>\n<td>Gemini CLI<\/td>\n<td>A terminal pilot to run commands, execute tests, and manage source control similar to Claude Code.<\/td>\n<td>Terminal/CLI<\/td>\n<\/tr>\n<tr>\n<td>Codewiki<\/td>\n<td>A self-updating GitHub wiki that explains your entire codebase using Gemini.<\/td>\n<td>GitHub Visualiser<\/td>\n<\/tr>\n<tr>\n<td>Firebase Studio<\/td>\n<td>A visual, AI-boosted cockpit for managing backend data and cloud logic.<\/td>\n<td>Backend Mgmt<\/td>\n<\/tr>\n<tr>\n<td>Gemini Code Assist<\/td>\n<td>Professional AI pair programmer integrated into VS Code, Cursor, and other IDEs, with a genuinely free tier.<\/td>\n<td>Coding Extension<\/td>\n<\/tr>\n<\/tbody>\n<\/table>"}, {"id": "04", "cat": "Guides", "title": "Turn Trip Photos Into a Digital Sketchbook", "summary": "One folder of photos + three prompts: Claude draws acrylic-style SVG versions of your trip photos in a flippable sketchbook.", "senders": "Nelson Lee (Substack), shared by 6 people", "source": "https://nelsonxlee.substack.com/p/turn-your-trip-photos-into-a-digital", "html": "<p>Turn Your Trip Photos Into A Digital Sketchbook With Claude Opus 5.5<\/p>\n<h3>One folder of photos, a few lines of notes, and three prompts in Claude Code. You end up with a sketchbook you can flip through and send to anyone.<\/h3>\n<p>Nelson Lee<\/p>\n<p>Sep 26, 2026<\/p>\n<p>Say you went to Japan: Fuji, then Osaka, then Kyoto. You can now turn that camera roll into a sketchbook. Every left page is the original photo, taped in like a polaroid. Every right page is Claude’s drawing of the same scene. And you flip it like a real sketchbook.<\/p>\n<p><img alt=\"\" src=\"https://substackcdn.com/image/fetch/$s_!CNIi!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F24a20c96-c35a-4146-9ba4-266114436490_2880x1684.jpeg\" /><\/p>\n<p>This is a photo of Toki Hossain’s Japan’s sketchbook.<\/p>\n<p>The idea came from Ann Nguyen, a frontend developer at TypingMind. She made one for her New Zealand trip and posted it on X. You can flip through hers here: Ann’s New Zealand sketchbook. Her original post is here: Link. And some of the photos you see here are from Toki on X, another great Canadian builder.<\/p>\n<p><img alt=\"X avatar for @tokifyi\" src=\"https://substackcdn.com/image/fetch/$s_!kTbc!,w_40,h_40,c_fill,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fpbs.substack.com%2Fprofile_images%2F2096092027180253184%2FSz1s9tmU.jpg\" /><\/p>\n<p>toki@tokifyi<\/p>\n<p>just tried this w my japan trip pics asked claude opus 5.5 to turn them into acrylic paintings all in javascript, this is actually insane<\/p>\n<p><img alt=\"X avatar for @ann_nnng\" src=\"https://substackcdn.com/image/fetch/$s_!VH31!,w_20,h_20,c_fill,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fpbs.substack.com%2Fprofile_images%2F2091330595632861184%2FQKmUwPaL.jpg\" /><\/p>\n<p>Ann Nguyen @ann_nnng<\/p>\n<p>asked Claude opus 5.5 to draw my new zealand trip pics in acrylic style and it did such an amazing job, all in javascript, look at these drawings 🥺<\/p>\n<p>3:40 PM · Sep 24, 2026 · 2.7K Views<\/p>\n<p><img alt=\"X avatar for @ann_nnng\" src=\"https://substackcdn.com/image/fetch/$s_!VH31!,w_40,h_40,c_fill,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fpbs.substack.com%2Fprofile_images%2F2091330595632861184%2FQKmUwPaL.jpg\" /><\/p>\n<p>Ann Nguyen@ann_nnng<\/p>\n<p>asked Claude opus 5.5 to draw my new zealand trip pics in acrylic style and it did such an amazing job, all in javascript, look at these drawings 🥺 <\/p>\n<p>1:37 AM · Sep 23, 2026 · 118K Views<\/p>\n<p>Here’s how to make your own sketchbook using Claude.<\/p>\n<p>What You’re Actually Making<\/p>\n<p>Claude doesn’t generate images. Every drawing in the sketchbook is an SVG it writes shape by shape. Flat fills with a paper grain over the top are what make it read as acrylic marker.<\/p>\n<p><img alt=\"\" src=\"https://substackcdn.com/image/fetch/$s_!AegO!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F35dc722d-7400-4eea-a772-ce4ce02b8f4d_2880x1684.jpeg\" /><\/p>\n<p>That’s why the model matters. Drawing in code means holding a whole scene in your head and building it out of shapes.<\/p>\n<p>When Anthropic launched Opus 5.5, one tester had several Claude models build a game from a single prompt, and Opus 5.5 scored highest on graphics and polish (Anthropic’s announcement).<\/p>\n<p>The engineering upside: the whole book is one HTML file and a folder of photos. It opens in any browser, and you can host it like any other website.<\/p>\n<p>Step 1: Prepare Your Photos<\/p>\n<p>Pick scenes with a clear subject: a street, a lake, a temple, the two of you in front of something. Those turn into strong drawings. Make a new folder, put a subfolder called photos inside it, and copy your picks in.<\/p>\n<p>Photos straight off your phone carry GPS coordinates in their metadata. If you ever share this book as a link, anyone can pull the exact spot each photo was taken. So the first prompt strips that out before anything else happens.<\/p>\n<p>Open the folder in Claude Code, run /model, pick Opus 5.5, and paste this:<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Prepare these trip photos for a sketchbook.\n\nGoal: a folder of web-ready photos in trip order, plus a notes file I can fill in.\n\nConstraints: Look at every image in ./photos. Sort them by the date each was taken, and fall back to the file name if there is no date. Resize each one to 1600px on the long edge, save it as a JPEG in ./sketchbook/photos, and strip all metadata, including GPS location. Name them 01.jpg, 02.jpg and so on. Do not edit or delete the originals. Then create notes.md with one section per photo: the file name, one line on what you see in it, and two blank lines for me to fill in.\n\nOutput: the sorted list with what you saw in each photo, and notes.md ready for me.\n<\/code><\/pre><\/div>\n<p>Step 2: Write Your Notes<\/p>\n<p>Open notes.md and fill in the blanks. The first line is where you were. The second is what you remember. <\/p>\n<p>If you skip this step, Claude will invent the captions and they come back generic.<\/p>\n<p>Here’s an example from Toki’s sketchbook:<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>07.jpg\nShinsekai, Osaka. Our last night.\nKushikatsu under Tsutenkaku, lanterns glowing, nobody wanting to go home.\n<\/code><\/pre><\/div>\n<p>That became this page:<\/p>\n<p><img alt=\"\" src=\"https://substackcdn.com/image/fetch/$s_!NzqX!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6482b726-ba84-4947-9a0f-31f0a53c11e0_2880x1684.jpeg\" /><\/p>\n<p>Write the way you’d text a friend. Short and specific beats polished. <\/p>\n<p>Add the local name of the place if you know it too. Claude puts it at the top of the page.<\/p>\n<p>Step 3: Build The Sketchbook<\/p>\n<p>This prompt draws the cover and the first spread, then stops. Look at those before Claude draws the rest. If the style is off, it’s cheaper to fix it on one page than on twelve.<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Build a digital travel sketchbook from ./sketchbook/photos and notes.md.\n\nGoal: one index.html in ./sketchbook that looks and behaves like a physical sketchbook, with one two-page spread per photo.\n\nConstraints:\nLeft page: the place name in the local language if I gave one, the English name in a handwritten font, and a short subtitle. Add a small stamp in one corner. Place the photo as a polaroid held on with washi tape, with my caption from notes.md underneath.\nRight page: an illustration of the same scene, drawn as inline SVG in an acrylic marker style. Use flat fills, a visible paper grain and slightly uneven edges, with a limited palette taken from the photo. Keep the photo's composition and landmarks, including signs and text, simplified into shapes. Do not embed or trace the photo on this page. Add one short caption under the drawing.\nAdd a front cover, a title page with the trip name and dates, and a closing page. Pages turn by dragging a corner, with the arrow keys, or by swiping on a phone. Use one handwritten Google Font for captions. No other external libraries. Reference the photos by relative path.\n\nBuild the cover and the first spread only, then stop and tell me how to open the file so I can check it. Draw the remaining spreads after I say go.\n\nOutput: index.html and the command to open it in my browser.\n\n<\/code><\/pre><\/div>\n<p><img alt=\"\" src=\"https://substackcdn.com/image/fetch/$s_!kXVV!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5560b865-5399-408e-88ca-139c40ecc633_2880x1684.jpeg\" /><\/p>\n<p>When the first spread looks right, reply “go.” Claude draws the rest in the same style.<\/p>\n<p>Step 4: Fix One Page At A Time<\/p>\n<p>Some drawings will miss. Maybe Fuji is too small, or the street should curve the other way. Don’t regenerate the book, because you’ll lose the pages that already work. Point at the one page:<\/p>\n<div class=\"prompt-block\"><button class=\"copy-btn\" type=\"button\">Copy prompt<\/button><pre><code>Redraw the illustration on the [page name] spread only. [What is wrong, for example: the mountain should be larger and centred, and the path curves left, not right.] Keep the palette and style of the other pages. Do not change any other page.\n<\/code><\/pre><\/div>\n<p>Busy scenes are the ones to check closely. A street like Dotonbori has dozens of signs stacked on top of each other, and each one is a shape Claude has to place.<\/p>\n<p><img alt=\"\" src=\"https://substackcdn.com/image/fetch/$s_!7BrT!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F32114404-186e-418b-8eb5-9e51bf446328_2880x1684.jpeg\" /><\/p>\n<p>Step 5: Share It<\/p>\n<p>It’s a folder with one HTML file in it. Host it like any other site.<\/p>\n<p>To send it to one person, zip the sketchbook folder. They unzip it and open index.html.<\/p>\n<p>To send it as a link, host it. That’s Episode 1 of my Software Engineering for Vibe Coders series, where I walk through getting a site from your laptop onto a real URL with Cloudflare’s free plan.<\/p>\n<p>You can read that in my other Substack article here:<\/p>\n<p><img alt=\"How To Get Your Claude Code Site Off Localhost And Online (Episode 1 of Software Engineering for Vibe Coders)\" src=\"https://substackcdn.com/image/fetch/$s_!l3KR!,w_280,h_280,c_fill,f_auto,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffbce95b5-b855-4b1a-9932-fbe514c776dc_2912x1760.png\" /><\/p>\n<p>Claude Code built you a beautiful landing page. It runs at localhost:3000. You text that link to a friend. And… it doesn’t load. Why?<\/p>\n<p>Cheers!<\/p>"}, {"id": "05", "cat": "Guides", "title": "Claude Design + HyperFrames Pipeline", "summary": "The shortest path from Claude Design visuals to an animated site: design, export zip, finish in Claude Code with HeyGen's HyperFrames.", "senders": "Ashok Reddy S", "source": "https://linkdm.co/ashoksangireddyy/Ln9U--0KjV", "html": "<p>The doc in full:<\/p>\n<p>Step 1 - Go to Claude Design and make whatever visuals, slides, or motion graphics.<\/p>\n<p>Step 2 - when done [Export] -&gt; [Download project as .zip]<\/p>\n<p>Step 3 - Now open that project locally using Claude Code / Codex / Cursor<\/p>\n<p>Step 4 - Install HyperFrames: https://github.com/heygen-com/hyperframes (ask claude code to install it with the link attached)<\/p>\n<p>\"It was insanely simple!\"<\/p>\n<p>Learn more: https://hyperframes.heygen.com/introduction<\/p>\n<p>What it's for: the shortest path from Claude Design visuals to an animated/motion website - design in Claude Design, export, finish locally with an AI coding agent + HeyGen's HyperFrames library.<\/p>"}, {"id": "06", "cat": "Guides", "title": "Making the dots Film with Opus 5.5", "summary": "Full pipeline for a 30s product launch film: script, rigs, scenes in code, score in Python, frame-by-frame render with Claude Code + Higgsfield.", "senders": "Ashok Reddy S", "source": "https://linkdm.co/ashokreddyai/Rc9N4Nn8ts", "html": "<p>Making the dots film with Opus 5.5 | Notion<\/p>\n<p>How the 30-second launch film for OpenAI's dots was made — the official 3D characters, Higgsfield footage and voice, every scene animated in code, a score written in Python, rendered frame by frame.<\/p>\n<p>30 s · 900 frames · 1080p and 4K · 30 fps · −16 LUFS · 120 BPM<\/p>\n<p>The finished film<\/p>\n<p>The finished film<\/p>\n<p>Pipeline: References → Script → Rigs + font → Higgsfield footage + voice → Scenes in code → Score in Python → Render → Encode + check → 4K<\/p>\n<table>\n<thead>\n<tr>\n<th>Scene<\/th>\n<th>Time<\/th>\n<th>Caption<\/th>\n<th>Voice line (Juno)<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>S1<\/td>\n<td>0.0–3.5 s<\/td>\n<td>This is your dot.<\/td>\n<td>\"This is your dot.\"<\/td>\n<\/tr>\n<tr>\n<td>S2<\/td>\n<td>3.5–7.6 s<\/td>\n<td>It learns how you work.<\/td>\n<td>\"It learns how you work, and what good looks like to you.\"<\/td>\n<\/tr>\n<tr>\n<td>S3<\/td>\n<td>7.6–13.7 s<\/td>\n<td>You log off. / It keeps going.<\/td>\n<td>\"When you log off, it keeps going.\"<\/td>\n<\/tr>\n<tr>\n<td>S4<\/td>\n<td>13.7–19.7 s<\/td>\n<td>It catches what slipped. / And waits for your OK.<\/td>\n<td>\"By morning, it's caught what slipped.\" · \"And it waits for your okay.\"<\/td>\n<\/tr>\n<tr>\n<td>S5<\/td>\n<td>19.7–24.6 s<\/td>\n<td>Name it. Make it yours.<\/td>\n<td>\"Give it a name. Make it yours.\"<\/td>\n<\/tr>\n<tr>\n<td>S6<\/td>\n<td>24.6–30.0 s<\/td>\n<td>dots · Always on it.<\/td>\n<td>\"Dots. Always on it.\"<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<h2>00 · What you need<\/h2>\n<p>One Mac. Claude Code writes and runs the code; Higgsfield makes the footage and the voice.<\/p>\n<h2>01 · Collect references<\/h2>\n<p>The official dots film and motion pieces you like, the product page, and a list of true claims — the film shows only those.<\/p>\n<h2>02 · Pick the idea and write the script<\/h2>\n<p>\"Always on it.\" — the dot keeps working at night, catches a forgotten invoice, waits for your OK, and ends on making it yours.<\/p>\n<h2>03 · Get the official ingredients<\/h2>\n<p>The four rigged characters (Felipe, Alfred, Jojo, Todd), the \"Your dot\" ring, OpenAI Sans, and the key visual to match. Bones but no textures — the fur is made in code.<\/p>\n<h2>04 · Her-life footage in Higgsfield<\/h2>\n<p>A woman's evening in a small card in scenes 3 and 4; everything around it is drawn in code.<\/p>\n<p><img alt=\"Soul 2.0 plates\" src=\"attachment:ca39e959-c21d-4460-9c13-79507c884143:soul_plates.jpg\" /><\/p>\n<p>Soul 2.0 plates<\/p>\n<p><img alt=\"One face\" src=\"attachment:9d1c3684-f88d-40bd-bcb8-b0dbff6ffc68:one_face.jpg\" /><\/p>\n<p>One face<\/p>\n<p>Kling dinner clip<\/p>\n<p>Kling dinner clip<\/p>\n<p><img alt=\"The five clips\" src=\"attachment:f000ff17-eb18-4ffd-81cb-7651b4011ff1:kling_strips.jpg\" /><\/p>\n<p>The five clips<\/p>\n<h2>05 · Voiceover<\/h2>\n<p>ElevenLabs, preset voice Juno — one file per line, seven lines.<\/p>\n<h2>06 · The film project<\/h2>"}, {"id": "07", "cat": "Guides", "title": "AI Chip Scroll-Animation Landing Page", "summary": "Step by step in Cursor: keyframes generated in Google Whisk, transition video in Google Flow, scroll-linked playback.", "senders": "Lindsay Gonzales", "source": "https://shorturl.at/HJtYN", "html": "<p>Complete Workflow: AI Chip Scroll Animation Landing Page | Notion<\/p>\n<p>Here's everything you need to build this yourself in Cursor. Follow step by step.<\/p>\n<h2>Step 1: Generate Key Frames in Google Whisk<\/h2>\n<p>Tool: Google Whisk<\/p>\n<h3>Start Frame Prompt (Assembled AI Chip):<\/h3>\n<p>Ultra-premium product photography of a futuristic AI processor chip, matte black with subtle metallic edges, glowing soft blue circuit traces, placed on a matte black surface. Deep black background with subtle gradient falloff, soft rim lighting outlining the chip edges, controlled reflections on smooth metal and glass textures. Cinematic lighting, high contrast, luxury tech aesthetic, sharp focus, shallow depth of field. No clutter, no text, no logos. Shot with professional DSLR, 85mm lens, f/1.8, ultra-high resolution, photorealistic, Apple-level product shoot, dramatic mood, modern and elegant.<\/p>\n<h3>End Frame Prompt (Exploded AI Chip):<\/h3>\n<p>Exploded technical diagram view of the same matte black AI processor chip, every component precisely separated and floating in perfect alignment, suspended in mid-air against a deep black studio background. Visible internal structure including silicon die, gold wire bonding, circuit layers, capacitors, heat spreader, substrate layers, and glowing blue neural pathway traces. Hyper-realistic product visualization, ultra-sharp focus, studio rim lighting identical to the hero shot, soft highlights tracing each component, controlled reflections on matte and metal surfaces. Cinematic lighting, high contrast, luxury engineering aesthetic, no labels, no annotations, no text. Photorealistic, ultra-high resolution, Apple-style industrial design render, dramatic and clean.<\/p>\n<p>Action:<\/p>\n<ol>\n<li>Paste the start frame prompt → Generate → Save best result as image-1.png<\/li>\n<li>Paste the end frame prompt → Generate → Save best result as image-2.png<\/li>\n<\/ol>\n<h2>Step 2: Generate Transition Video in Google Flow<\/h2>\n<p>Tool: Google Flow<\/p>\n<ul>\n<li>First frame: image-1.png (assembled chip)<\/li>\n<li>Last frame: image-2.png (exploded chip)<\/li>\n<\/ul>\n<h3>Motion Prompt:<\/h3>\n<p>Smoothly transition from the assembled AI chip to the exploded view, slow motion, cinematic, floating components gently separating in 3D space<\/p>\n<p>Action:<\/p>"}, {"id": "08", "cat": "Guides", "title": "Codex + Kling = $15K Animated Website (Video Guide)", "summary": "How scroll-linked video-animation sites work: GPT image frames + Kling via fal.ai, wired to scroll. Full transcript condensed.", "senders": "Harnoor Singh", "source": "https://youtu.be/eUkCSssoYHw", "html": "<h2>What it teaches<\/h2>\n<p>How viral \"motion websites\" work and how to build them: the hero animation is literally a VIDEO whose playback is tied to scroll position (scroll down = video advances, scroll stops = video stops). People charge $10k+ for these; the whole build takes under an hour once set up.<\/p>\n<h2>The stack (model/agent agnostic)<\/h2>\n<ul>\n<li>Codex or Claude Code as the coding agent (author uses Codex)<\/li>\n<li>GPT image generation for the start + end frames<\/li>\n<li>Kling (via fal.ai API, about $0.10 per generated video) to animate frame 1 into frame 2<\/li>\n<li>The author's skill \"kling motion webp\" (on his marketplace skillmake.xyz, also on GitHub) which wraps the whole workflow into one prompt<\/li>\n<\/ul>\n<h2>Steps<\/h2>\n<ol>\n<li>Pick a reference: screenshot a site/photo you like and give it to the agent as the first image.<\/li>\n<li>Agent (or you, with image gen) creates the START and END frames of the animation.<\/li>\n<li>Kling generates the transition video from frame 1 to frame 2 (you supply the fal.ai API key when the skill asks; keep it out of GitHub).<\/li>\n<li>Wire the video to scroll: video progress follows scroll position.<\/li>\n<li>Steer with prompts until it looks right. It never comes out perfect in one shot.<\/li>\n<\/ol>\n<h2>Skills and resources he names<\/h2>\n<ul>\n<li>Framer Motion (\"frame of motion\") - motion graphics skill, ~32k GitHub stars<\/li>\n<li>UX Pro Max - hand-curated UX skill, ~75k GitHub stars<\/li>\n<li>21st.dev - ready-made animation effects as copy-paste prompts (good for quick deploys; he built from scratch instead)<\/li>\n<li>skillmake.xyz - his skill marketplace; the \"kling motion webp\" skill combines UI/UX + the video workflow<\/li>\n<\/ul>\n<h2>Speed tips<\/h2>\n<ul>\n<li>Let the agent self-iterate: \"/goal\" (experimental, works in the Codex CLI, not the app yet) or \"ultrathink\" in Claude Code - with enough tokens it gets there in one shot.<\/li>\n<li>First site took him 1 hour; the second took 20 minutes with the skill.<\/li>\n<li>Give sharp instructions (exact start image, site title) or the agent picks random frames.<\/li>\n<\/ul>\n<h2>Examples he shows<\/h2>\n<ul>\n<li>An iPhone-fold style scroll site (iphone.vercial.app): portrait photo morphs to a hardware shot as you scroll.<\/li>\n<\/ul>"}, {"id": "09", "cat": "Guides", "title": "Claude Opus 5.5 Motion Videos Tutorial", "summary": "Janus Tiu's workflow: exact prompt blocks for 7 animation styles (ASCII terminal, pixel dither, risograph, ink in water...). No After Effects, no keyframes.", "senders": "AI Adventurer, Miles Holden, Shaan Johari + 5 more", "source": "https://dm.stan.store/iAqWZI?mid=17906843508592845", "html": "<p>Guide | Claude Opus 5.5 Motion Videos Tutorial by @janustiu | Stan<\/p>\n<h1>Janus Tiu<\/h1>\n<p>Staff AI designer helping non-technical people build with AI<\/p>\n<p><img alt=\"Guide | Claude Opus 5.5 Motion Videos Tutorial\" src=\"https://stan.store/_next/image?url=https%3A%2F%2Fassets.stanwith.me%2Flive%2Fmsc%2F29010190%2Fybs4f%2Fscreenshot20261019at100455pm.png&amp;w=3840&amp;q=75\" /> Back<\/p>\n<h1>Guide | Claude Opus 5.5 Motion Videos Tutorial<\/h1>\n<p>The full workflow behind my 7 Claude motion videos. You get the setup, the base prompt block, and the exact prompt for every style: one-line graph, one-ball showreel, ASCII terminal, pixel dither, risograph cutout, Renaissance codex, and ink in water. Each style comes with a frame from my render, its palette, and a fix for when it goes wrong. Made with Claude Opus 5.5. No After Effects, no keyframes.<\/p>"}, {"id": "10", "cat": "Tools", "title": "Emergent", "summary": "Vibe-coding platform for web and mobile apps, pitched by Nick Cornelius.", "senders": "Nick Cornelius", "source": "https://emergent.sh/", "html": "<p>Emergent | Vibe Code Web &amp; Mobile Apps in Minutes with AI<\/p>\n<h1>Start building your own website for free<\/h1>\n<p>Describe your idea, Emergent builds it in minutes<\/p>\n<p>We saved over $10K and built a functional MVP in just days without hiring an agency or spending upfront.<\/p>\n<p>Alex Rivera Founder, TaskFlow<\/p>\n<p>Emergent helped us cut our MVP cost in half while validating what actually works before bringing in engineers.<\/p>\n<p>Maya Chen Product Lead, BrightSuite<\/p>\n<p>We tested our idea with real users early and used that feedback to avoid building features no one needed<\/p>\n<p>Jordan Patel Co-founder, LoopDesk<\/p>\n<p>We saved over $10K and built a functional MVP in just days without hiring an agency or spending upfront.<\/p>\n<p>Alex Rivera Founder, TaskFlow<\/p>\n<p>Emergent helped us cut our MVP cost in half while validating what actually works before bringing in engineers.<\/p>\n<p>Maya Chen Product Lead, BrightSuite<\/p>\n<p>We tested our idea with real users early and used that feedback to avoid building features no one needed<\/p>\n<p>Jordan Patel Co-founder, LoopDesk<\/p>\n<p>We saved over $10K and built a functional MVP in just days without hiring an agency or spending upfront.<\/p>\n<p>Alex Rivera Founder, TaskFlow<\/p>\n<p>Emergent helped us cut our MVP cost in half while validating what actually works before bringing in engineers.<\/p>\n<p>Maya Chen Product Lead, BrightSuite<\/p>\n<p>We tested our idea with real users early and used that feedback to avoid building features no one needed<\/p>\n<p>Jordan Patel Co-founder, LoopDesk<\/p>\n<p>We saved over $10K and built a functional MVP in just days without hiring an agency or spending upfront.<\/p>\n<p>Alex Rivera Founder, TaskFlow<\/p>\n<p>Emergent helped us cut our MVP cost in half while validating what actually works before bringing in engineers.<\/p>\n<p>Maya Chen Product Lead, BrightSuite<\/p>\n<p>We tested our idea with real users early and used that feedback to avoid building features no one needed<\/p>\n<p>Jordan Patel Co-founder, LoopDesk<\/p>\n<h2>Trusted by builders worldwide<\/h2>\n<p>10M+<\/p>\n<h3>Active Builders Worldwide<\/h3>\n<p>15M+<\/p>\n<h3>Apps Successfully Created<\/h3>\n<p>200+<\/p>\n<h3>Countries Globally Reached<\/h3>\n<h2>Build Your Ideas in 3 Simple Steps<\/h2>\n<h3>Describe Your Idea Simply<\/h3>\n<p>Start describing what you want to build in simple words. We turn it into a clear foundation with screens, flows, and core features ready, without technical complexity.<\/p>\n<h3>Shape It the Way You Imagine<\/h3>\n<p>As your idea becomes real screens and layouts, adjust visuals, fine-tune features, and shape the experience freely. So it looks and feels exactly the way you envisioned.<\/p>\n<h3>Go Live with Confidence<\/h3>\n<p>Publish your product on production-ready built-in hosting. Secure databases and APIs are already set up. Your app stays fast and runs smoothly as more users join.<\/p>\n<h2>Curious about Emergent? We got you covered<\/h2>\n<p>What is Emergent and how does it work?<\/p>\n<p>Emergent is an AI-powered development platform that transforms your ideas into fully functional applications. Simply describe what you want to build in natural language, and our AI handles the coding, design, and deployment. No programming experience required.<\/p>\n<p>What can I build with Emergent?<\/p>\n<p>Build web applications, mobile apps, dashboards, e-commerce sites, portfolio websites, SaaS tools, internal business applications, and more. From simple landing pages to complex multi-user platforms, Emergent handles projects of any scale.<\/p>\n<p>How does Emergent's pricing work?<\/p>\n<p>We offer plans starting at $17/month for individual builders, $167/month for power users, and $250/month for teams. Each plan includes monthly build credits. You can also purchase additional credits as needed.<\/p>\n<p>Do I need coding experience to use Emergent?<\/p>\n<p>Not at all! Emergent is designed for everyone - from complete beginners to experienced developers. You simply describe your vision, and we handle all the technical implementation.<\/p>\n<p>How is Emergent different from other no-code platforms?<\/p>\n<p>Unlike traditional no-code tools that require learning drag-and-drop interfaces, Emergent works through natural conversation. Plus, we generate actual production-ready code that you own and can modify.<\/p>\n<p>What happens to the code Emergent creates?<\/p>\n<p>You own all the code Emergent generates. We can integrate with GitHub for version control, and you're free to download, modify, or host your applications anywhere you choose.<\/p>"}, {"id": "11", "cat": "Tools", "title": "Draftly", "summary": "No-code 3D / immersive website builder, pitched by Dr. Alvaro Cintas.", "senders": "Dr. Alvaro Cintas, Piyush Singh", "source": "https://www.draftly.space/", "html": "<p>Draftly 3D Website Builder | No-Code Immersive Website Creation<\/p>\n<h1>Draftly — AI 3D Website Builder: Cinematic Scroll Websites from a Single Prompt<\/h1>\n<h2>Best Previews<\/h2>\n<p>Every preset here is inspired by a real Draftly customer — their brief, their industry, their visual taste — shared with their consent so you can start from something proven. Pick one, make it yours, ship it.<\/p>\n<h3>Aether — Deep Field Survey<\/h3>\n<p>Deep-space planetary survey — a planet parked below the fold scales past the viewport and you fall through into a scroll-scrubbed orbital flyover, with four worlds and hard wipes between.<\/p>\n<h3>Volta — Electric Moped<\/h3>\n<p>Six-page light studio product site for an electric moped brand — floating UI cards, a scroll-scrubbed 360° turntable, an exploded parts sequence, a live finish picker and curtain-wiped page transitions.<\/p>\n<h3>The Obsidian Assembly<\/h3>\n<p>Warm editorial artefact archive — a display serif splits apart, artefact cards fly into the gap, then collapse into a scroll-driven stacked deck of seven objects before a full-bleed architectural close.<\/p>\n<h3>Vanta — Model 03 Nocturne<\/h3>\n<p>Cinematic automotive launch — a silk dust sheet lifts off the car under scroll, then a desert run where the car passes in front of and behind a wordmark the size of the screen.<\/p>\n<h3>Threshold — Six Worlds<\/h3>\n<p>A stone portal onto six worlds — the arch never moves while the world beyond it changes through an arch-shaped mask that opens inside the archway, then floods past the stone to full bleed.<\/p>\n<h3>Helix Mini — Micro-Drone<\/h3>\n<p>Product launch for an autonomous micro-drone — the product lands inside a sandwich of giant type, unfolds under scroll-scrub with annotated callouts, and the page inverts dark-to-light mid-scroll.<\/p>\n<h3>Builders who shipped with presets<\/h3>\n<p>Real people, real launches — shared with their consent.<\/p>\n<p>Our e-commerce store needed a landing page fast. Draftly nailed the brand feel. Sales converted from day one.<\/p>\n<p><img alt=\"Isabella Rossi\" src=\"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=128&amp;h=128&amp;fit=crop&amp;crop=face\" /><\/p>\n<p>Isabella Rossi Founder, Lumina Co.<\/p>\n<p>🇮🇹 Italy<\/p>\n<p>Draftly replaced a $4,000 agency quote with a 15-minute session. The result was honestly better.<\/p>\n<p><img alt=\"Arjun Mehta\" src=\"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=128&amp;h=128&amp;fit=crop&amp;crop=face\" /><\/p>\n<p>Arjun Mehta Startup Founder<\/p>\n<p>🇮🇳 India<\/p>\n<p>I built my restaurant's full site in under 10 minutes. Customers keep asking who designed it — I just say Draftly.<\/p>\n<p><img alt=\"Priya Sharma\" src=\"https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=128&amp;h=128&amp;fit=crop&amp;crop=face\" /><\/p>\n<p>Priya Sharma Restaurant Owner<\/p>\n<p>🇮🇳 India<\/p>\n<p>Launched my SaaS landing page before the weekend was over. No agency, no templates, no HTML — just a prompt.<\/p>\n<p><img alt=\"Lukas Becker\" src=\"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&amp;h=128&amp;fit=crop&amp;crop=face\" /><\/p>\n<p>Lukas Becker Indie Developer<\/p>\n<p>🇩🇪 Germany<\/p>\n<p>My clients think I hired a design agency. I used a Draftly preset and swapped the copy. Done in an afternoon.<\/p>\n<p><img alt=\"Amara Osei\" src=\"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=128&amp;h=128&amp;fit=crop&amp;crop=face\" /><\/p>\n<p>Amara Osei Freelance Consultant<\/p>\n<p>🇬🇭 Ghana<\/p>\n<p>Use arrows or drag · auto-advances every 3s<\/p>\n<h2>From prompt to production<\/h2>\n<p>Use a stunning preset and edit in place — or describe a 3D scroll site from scratch. AI generates motion, extracts frames, and ships production HTML without a long prompt.<\/p>\n<h2>Your video becomes a scroll experience<\/h2>\n<p>AI generates a cinematic video, then extracts hundreds of frames. As visitors scroll, the frames play forward — creating a 3D parallax effect that feels like a film.<\/p>\n<p>No WebGL, no Three.js, no code — just native browser scroll with buttery-smooth frame interpolation. Works perfectly on every device and browser.<\/p>\n<h2>Built for serious websites<\/h2>\n<p>Presets give you polished UI instantly; the 3D builder adds cinematic scroll on top. Chain videos, swap media, layer elements over frames, and export production-ready code.<\/p>\n<h2>Build 3D websites 10x faster with AI<\/h2>\n<p>Describe what you want once. Draftly generates cinematic motion, extracts frames, and builds a scroll-driven 3D website in minutes — not days. Download the ZIP and ship.<\/p>"}, {"id": "12", "cat": "Communities", "title": "Automation Academy (Skool)", "summary": "Nick Cornelius's free AI automation community: Claude Code, Codex, n8n, Make, AI voice - plus sales frameworks. Free tier.", "senders": "Nick Cornelius", "source": "https://www.skool.com/automation-academy-7703/about", "html": "<p>Automation Academy<\/p>\n<p>Public<\/p>\n<p>Free<\/p>\n<p><img alt=\"Nick Cornelius\" src=\"https://assets.skool.com/f/2942f103c81a4b0ca43e4c0e093be4bb/0063ea0956bf4eab875f83127b426fe1947b19e5b62f46879b78aa2aec2d643b-sm.jpg\" /><\/p>\n<p>By Nick Cornelius<\/p>\n<p>Automation Academy is a community of owners, engineers, and consultants using AI to build systems that scale.<\/p>\n<p>Inside you'll find the latest and greatest AI tools, techniques, and systems used right now inside tens of thousands of 7, 8, and 9-figure companies.<\/p>\n<p>In this community we cover operational skills like claude code, codex, n8n, Make.com, GHL, AI Voice tech and more... As well as mindset and sales frameworks to sell your first agents.<\/p>\n<p>Upgrade to Premium ($47/mo) and unlock:<\/p>\n<p>→ 1:1 onboarding / consultation call with Nick<\/p>\n<p>→ All 8 full mastery courses (GHL, Sales, Prompts, N8N, Make, AI Video, AI Voice)<\/p>\n<p>→ Bi-Weekly live Q&amp;A with agency owners and entrepreneurs<\/p>\n<p>→ Full template, SOP, and automation blueprint library<\/p>\n<p>→ 24/7 Unlimited Software Build Q&amp;A and Helpline<\/p>\n<p>→ 1000 FREE Leads Per Month<\/p>\n<p>Automation Academy<\/p>\n<p>skool.com/automation-academy-7703<\/p>\n<p>The Best Systems Behind The Best Brands. Join FREE — learn AI automation, sales systems, and scaling strategies used by top agencies and consultants.<\/p>"}, {"id": "13", "cat": "Communities", "title": "GenHQ - Creative AI Education (Skool)", "summary": "Rourke Sefton-Minns's creative AI community. Rank #1 Tech on Skool, 1.5k members, $97/mo.", "senders": "Rourke Sefton-Minns", "source": "https://www.skool.com/genhq/about?ref=096fdb02b0344f3ea7ecd88f9578e28f", "html": "<p>GenHQ - Creative AI Education<\/p>\n<p>GenHQ - Creative AI Education<\/p>\n<p>GenHQ - Creative AI Education<\/p>\n<p>5.0 · 67 reviews<\/p>\n<p>6:54<\/p>\n<p>Private<\/p>\n<p>1.5k members<\/p>\n<p>$97 /month<\/p>\n<p><img alt=\"Rourke Sefton-Minns\" src=\"https://assets.skool.com/f/55c00a21734c48acb912dc4c862b5edc/ccb117e66c1945b4bcc8ab1a16f35e7ebcc8a57bd6fb4e24ab748b7ef905c2b5-sm.jpg\" /><\/p>\n<p>By Rourke Sefton-Minns<\/p>\n<p>👑<\/p>\n<p>🏅 Rank #1 Tech Community on Skool<\/p>\n<p>🏆 Creating 100,000 AI Jobs<\/p>\n<p>Everything you learn inside GenHQ is designed for real creative work, real clients, and real business outcomes.<\/p>\n<p>🌍 Every video has subtitles in 28 languages<\/p>\n<p>✅ What you get access to:<\/p>\n<ul>\n<li>Beginner to advanced walkthroughs on every essential AI tool <\/li>\n<li>Creative AI education that produces top 1% creatives<\/li>\n<li>Full-stack workflows used on client work<\/li>\n<li>How to build your own personal brand with AI &amp; win on social media<\/li>\n<li>Fast, practical breakdowns of major AI updates<\/li>\n<li>Interviews with top earners sharing repeatable frameworks<\/li>\n<li>How AI ads are built end-to-end<\/li>\n<li>Master sound design<\/li>\n<li>How storytelling, pacing, &amp; emotion are designed<\/li>\n<li>\n<p>How top creators think about taste, direction &amp; differentiation<\/p>\n<\/li>\n<li>\n<p>Live consulting, workflow reviews, and Q&amp;A sessions<\/p>\n<\/li>\n<li>\n<p>Find, price &amp; close AI clients with confidence<\/p>\n<\/li>\n<li>Structure projects like a studio<\/li>\n<li>Turn AI output into sellable deliverables<\/li>\n<\/ul>\n<p>You get instant access to everything the moment you join. All sales are final.<\/p>\n<p>Cancel renewals anytime.<\/p>\n<p>5.0 · 67 reviews<\/p>\n<p><img alt=\"Dave Spector\" src=\"https://assets.skool.com/f/94f2f980467b494ebdf748cd1118d302/fc65338d659d4b14ac9e62a3e06e0188989a67433f0b4afd9b7537d3dd8f2f11-sm.jpg\" /><\/p>\n<p>Dave Spector<\/p>\n<p>Tons of top quality content, great education, supportive community, and cash prize contests as you learn! There''s a lot of inspiration at GenHQ! I learned a ton from Rourke and the guest speakers. Six months after I joined, I used my experience to get a job as an AI Creative Director at a marketing agency, and then I got nominated for a Webby! I met a great collaborator in the community. And just last week, I watched Simon Meyer's lessons and I learned even more! Big thanks to Rourke and team!<\/p>\n<p>Aug 2026 · Still a paying member after 14 months<\/p>\n<p><img alt=\"Cecilia Lopez\" src=\"https://assets.skool.com/f/e157ed2d541642bd81f77bdeeda83bb3/b79b13756d764cf78ee78cd0c1c3598c0cc7273767554bd2b610d77d43ee3a3f-sm.jpg\" /><\/p>\n<p>Cecilia Lopez<\/p>\n<p>This is THE place to be for creatives looking to leverage AI as a tool. With so many platforms, updates &amp; noise online, it's so overwhelming to navigate the space alone; GenHQ makes it easier to stay focused on what actually moves the needle. Besides education, the most valuable component is community. You got people from all levels - from beginners to top-paid creatives - giving feedback, sharing insights and juicy opportunities. Rourke and the whole team are super passionate and knowledgeable.<\/p>\n<p>Aug 2026 · Still a paying member after 7 months<\/p>\n<p><img alt=\"Max Kaplan\" src=\"https://assets.skool.com/f/3d0c981163e14c8daea91b874cee4d34/27e838e83aed492795275733cfe7bd0fe9dc4cb994ba425c8d0b7fa65a9412d6-sm.jpg\" /><\/p>\n<p>Max Kaplan<\/p>\n<p>GenHQ has been an amazing experience for me so far. I came in here with about 10 months of genAI experience and quickly found out how much there was to learn. Since joining my quality of work and capabilities with these tools has drastically increased, I won the ExpressVPN big ad contest placing my ad in Times Square, and am now hitting $10k+ months doing client work. This community ensures I am always up to date on the best methods and new tools and I greatly recommend it to anyone considering!<\/p>\n<p>Aug 2026 · Still a paying member after 5 months<\/p>\n<p><img alt=\"Murtaza Yusuf\" src=\"https://assets.skool.com/f/fae09727a7604e2e81bd0d4d0321fa18/c23c7c6e194447f09dd5c83f8714fc091ce44c9f7c9b46d1aa6e32e0a8c38170-sm.jpg\" /><\/p>\n<p>Murtaza Yusuf<\/p>\n<p>BEWARE !!! This community will make you cancel all other paid AI communities. Join only if you are ready for 1. Canceling other ai groups and saving $$$ 2. Serious about learning some great AI skills and not just wanting templates. 3. Meet some genius creators and creatives and community members who are from around the work willing to help and support. 4. Get answers to your question (how basic or complex) from the founder himself on calls (no need to pay extra for that) My best investment 💪<\/p>\n<p>Aug 2026 · Still a paying member after 6 months<\/p>\n<p>Anthony Hind<\/p>\n<p>Joining GenHQ has been one of the best decisions I've made in recent years. I genuinely love it here. The weekly competitions push me to keep creating and actually finish work instead of letting ideas sit, and the mentors are brilliant, always generous with their time and knowledge. The community itself is amazing too, welcoming and full of people who lift each other up rather than compete. The pace at which new content is delivered is second to none, and there's always something new to learn.<\/p>\n<p>Sep 2026 · Still a paying member after 13 months<\/p>\n<p>GenHQ - Creative AI Education<\/p>"}, {"id": "14", "cat": "Communities", "title": "Maker School (Skool)", "summary": "AI automation school - free community.", "senders": "Amir Afridi + 2 more", "source": "https://www.skool.com/makerschool/about?ref=0a3be5900d60497cb3542cca1ed3fdcb", "html": "<p>Maker School: AI Automation<\/p>\n<p>4.9 · 123 reviews<\/p>\n<p>Private<\/p>\n<p>2.8k members<\/p>\n<p>$184 /month<\/p>\n<p><img alt=\"Nick Saraev\" src=\"https://assets.skool.com/f/71a20756de344c0f8db2551c5962d04a/30a6f3c95f5e4c7da8a66b09cc5460f8dc80b8cca76447d8a1523545b0f437bf-sm.jpg\" /><\/p>\n<p>By Nick Saraev<\/p>\n<p>Maker School is the fastest &amp; most affordable way to get client #1 for AI automation with tools like Claude Code, Codex, n8n and more.<\/p>\n<p>Get your first paying AI client in 90d or your money back.<\/p>\n<p>What's inside (worth +$40K) ⬇️<\/p>\n<p>✅ 218 exclusive videos &amp; guides: a day-by-day roadmap to AI client #1<\/p>\n<p>✅ Live coaching: I respond to almost every post each day<\/p>\n<p>✅ $21K in IMMEDIATE discounts to AI automation platforms<\/p>\n<p>✅ Full end-to-end courses (Claude n8n &amp; more)<\/p>\n<p>✅ &gt;50 templates/scripts for AI, lead gen &amp; sales 📦<\/p>\n<p>✅ 3 underground lead gen methods to find &amp; close high-ticket clients FAST<\/p>\n<p>✅ My stack: the proposals/scripts/AI assets I used to do $160K/m across two agencies<\/p>\n<p>BONUSES (worth +$10K) 🎁<\/p>\n<p>🎁 Daily QA w Nick: I answer &amp; record custom vids for you<\/p>\n<p>🎁 Over 2K AI consultants: build your network, meet people IRL &amp; grow 🌍<\/p>\n<p>⚠️ Price increasing to $194/mo soon!<\/p>\n<p>Join now &amp; land AI client #1 in 90d or get a full refund.<\/p>\n<p>4.9 · 123 reviews<\/p>\n<p><img alt=\"Tran Manh Duc\" src=\"https://assets.skool.com/f/3f1f489b445d4ad1b6f54151e24574ea/bfc6286d12294fafb0b1f833e9c43e4bbf2436eb3a664c97a17a15d281a7beb5-sm.jpg\" /><\/p>\n<p>Tran Manh Duc<\/p>\n<p>Maker School stands out because it connects AI automation skills directly to client acquisition and revenue-generating action. The program offers a clear path, practical templates, daily accountability, and honest feedback from people actively building their businesses. I especially value its strong focus on consistency and execution rather than endless learning. It’s a useful community for anyone serious about turning AI automation skills into a real service business.<\/p>\n<p>Aug 2026 · Still a paying member after 6 months<\/p>\n<p>Mia Wilkins<\/p>\n<p>Maker School has literally changed my life. I joined in March 2025 earning £1k per month and now in August 2026 due to make £7k this month. I can't thank Nick and the support of the Maker School community enough. There is no secret, if you follow the course consistently you will land clients and make money. In my case, more money than I thought I'd ever make in a month and I know there is a lot more to come. Genuinely couldn't imagine my life without Maker School now!<\/p>\n<p>Aug 2026 · Still a paying member after 19 months<\/p>\n<p>Ann V<\/p>\n<p>Maker School is honestly one of the best AI communities I’ve come across, and I’ve been in quite a few, especially around AI automations. You’re not just learning random tools or theory. Everything is laid out so you can learn something and immediately implement it, use it for a client, or turn it into something you can make money from. Nick teaches in a way that’s incredibly easy to follow, and everything feels practical and useful instead of overwhelming.<\/p>\n<p>Aug 2026 · Still a paying member after 12 months<\/p>\n<p>Brian Clarke<\/p>\n<p>Nick gives away more value than almost anyone I've seen. He's also actually in the community answering people daily. He's got tons of knowledge and experience that's extremely useful and the weekly calls are great to pick his brain with. He is updating everything frequently and the amount of information that's been built up over time is also nothing to sleep on. I can definitely relate a lot of my success to the Maker School community. 10/10 <\/p>\n<p>Aug 2026 · Still a paying member after 18 months<\/p>\n<p>Sebastian Olegård<\/p>\n<p>Being a part of Maker School for the past year has really been one of the best decisions I've made. I started an AI agency after joining, and started learning about AI, which is really why I joined the community. Thanks to the way Nick outlines in the program, I started getting clients and have been working with them ever since. Now I'm on to new business adventures that are only possible because I was able to learn from the community. <\/p>\n<p>Aug 2026 · Still a paying member after 17 months<\/p>\n<p>Maker School: AI Automation<\/p>"}, {"id": "15", "cat": "Leads", "title": "Zera Software Studio", "summary": "Web dev agency that cold-DMed twice with the same pitch. Kept for reference.", "senders": "Jerry Rogers, Web Systems Specialist", "source": "https://zerasoftwarestudio.com/webdeveloper", "html": "<p>The Award-Winning Web Developer | Zera Studio<\/p>\n<h1>Build $5K to $20K+ Websites Without Coding<\/h1>\n<p>Learn the exact system used to create premium, award-level sites (and how to sell them)<\/p>\n<p>No coding. No guesswork. Built for beginners.<\/p>\n<ul>\n<li><img alt=\"FWA\" src=\"https://zerasoftwarestudio.com/images/carousel/fwa.webp\" /><\/li>\n<li><img alt=\"Dribbble\" src=\"https://zerasoftwarestudio.com/images/carousel/dribbble.webp\" /><\/li>\n<li><img alt=\"Siteinspire\" src=\"https://zerasoftwarestudio.com/images/carousel/siteinspire.webp\" /><\/li>\n<li><img alt=\"Awwwards\" src=\"https://zerasoftwarestudio.com/images/carousel/awwwards.svg\" /><\/li>\n<li><img alt=\"Behance\" src=\"https://zerasoftwarestudio.com/images/carousel/behance.webp\" /><\/li>\n<\/ul>\n<h2>Proof this actually works<\/h2>\n<p>Real messages, builds, and outcomes from people applying the system.<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>First €3.5K client Student · Germany<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>First €3.5K client Student · Germany<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>First €3.5K client Student · Germany<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>First €3.5K client Student · Germany<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“After going through the masterclass, I completely changed my website. I didn’t understand the importance of shading, white space, and spacing before. There was so much I learned from the masterclass.”<\/p>\n<p>Completely changed his website Tyler Somers · Video<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“After going through the masterclass, I completely changed my website. I didn’t understand the importance of shading, white space, and spacing before. There was so much I learned from the masterclass.”<\/p>\n<p>Completely changed his website Tyler Somers · Video<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“After going through the masterclass, I completely changed my website. I didn’t understand the importance of shading, white space, and spacing before. There was so much I learned from the masterclass.”<\/p>\n<p>Completely changed his website Tyler Somers · Video<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“After going through the masterclass, I completely changed my website. I didn’t understand the importance of shading, white space, and spacing before. There was so much I learned from the masterclass.”<\/p>\n<p>Completely changed his website Tyler Somers · Video<\/p>\n<p>“Four videos in and I’m already recognizing hierarchy, spacing, and micro-interactions everywhere. Your breakdown makes the concepts illegally simple. ”<\/p>\n<p>Applied after four lessons Student message<\/p>\n<p>“As a non-web-design guy—just a regular marketing guy— it was perfectly understandable, with incredible value in the first 15 minutes. ”<\/p>\n<p>Clear for beginners Marketing student<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“Four videos in and I’m already recognizing hierarchy, spacing, and micro-interactions everywhere. Your breakdown makes the concepts illegally simple. ”<\/p>\n<p>Applied after four lessons Student message<\/p>\n<p>“As a non-web-design guy—just a regular marketing guy— it was perfectly understandable, with incredible value in the first 15 minutes. ”<\/p>\n<p>Clear for beginners Marketing student<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“Four videos in and I’m already recognizing hierarchy, spacing, and micro-interactions everywhere. Your breakdown makes the concepts illegally simple. ”<\/p>\n<p>Applied after four lessons Student message<\/p>\n<p>“As a non-web-design guy—just a regular marketing guy— it was perfectly understandable, with incredible value in the first 15 minutes. ”<\/p>\n<p>Clear for beginners Marketing student<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“Four videos in and I’m already recognizing hierarchy, spacing, and micro-interactions everywhere. Your breakdown makes the concepts illegally simple. ”<\/p>\n<p>Applied after four lessons Student message<\/p>\n<p>“As a non-web-design guy—just a regular marketing guy— it was perfectly understandable, with incredible value in the first 15 minutes. ”<\/p>\n<p>Clear for beginners Marketing student<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p>Creativity restored Student message<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>$4K client signed Student · Australia<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>27% conversion lift Student message<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>First €3.5K client Student · Germany<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>First €3.5K client Student · Germany<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“I used what you taught on structure and presentation and landed my first €3.5K client this week. I’m not even finished yet, but my work already looks way more premium.”<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>First client landed Student message<\/p>\n<p>“The way you break down design, structure, and positioning made everything click. I signed a new client for $4K this week. I’m still going through the masterclass, but it already paid for itself.”<\/p>\n<p>“I used the same system you showed in the masterclass and built something similar in three days—and I got $2K for it. ”<\/p>\n<p>$2K website in three days Danijel Susakovic · Video<\/p>\n<p>“I implemented the basics from Modules 1 and 2 into my landing pages. Conversion rate is up 27% with a significantly better lead score. ”<\/p>\n<p>“The masterclass was super clear, well structured, and packed with value. I started applying what I learned and got my first client from it. Worth every penny.”<\/p>\n<p>Completely changed his website Tyler Somers · Video<\/p>\n<p>“Four videos in and I’m already recognizing hierarchy, spacing, and micro-interactions everywhere. Your breakdown makes the concepts illegally simple. ”<\/p>\n<p>“As a non-web-design guy—just a regular marketing guy— it was perfectly understandable, with incredible value in the first 15 minutes. ”<\/p>\n<p>Clear for beginners Marketing student<\/p>\n<p>“I went through your masterclass—which is flipping amazing. I lost my sense of purpose in design, and your masterclass helped bring back my creativity. ”<\/p>\n<p><img alt=\"Stripe analytics dashboard showing gross volume, recurring revenue, and new customer growth\" src=\"https://zerasoftwarestudio.com/images/proof/stripe-growth-dashboard.webp\" /><\/p>\n<p><img alt=\"Stripe transaction dashboard showing multiple successful customer payments\" src=\"https://zerasoftwarestudio.com/images/proof/payment-transactions.webp\" /><\/p>\n<h2>Built from paid projects. Trusted by 2,500+ students.<\/h2>\n<p>The Stripe payments beside this came from someone using this exact system to turn premium website skills into paid client work. It is the same process Zera Studio has now taught to more than 2,500 students—built from real projects and designed to be reused again and again. Real payments. A repeatable system. A practical path from skill to income.<\/p>\n<h2>What You Learn<\/h2>\n<p>Short. Clear. No fluff.<\/p>\n<p>Inside the masterclass:<\/p>\n<p>✓ Build premium websites without coding ✓ Learn a repeatable system (not random tutorials) ✓ Use AI to speed up builds ✓ Position yourself for $5K+ clients<\/p>\n<p><img alt=\"A premium website structure created without coding\" src=\"https://zerasoftwarestudio.com/images/webdeveloper-template/stages/start-structure.webp\" /><\/p>\n<h3>Build premium websites without coding<\/h3>\n<p><img alt=\"A premium website structure created without coding\" src=\"https://zerasoftwarestudio.com/images/webdeveloper-template/stages/start-structure.webp\" /><\/p>\n<h3>Learn a repeatable system (not random tutorials)<\/h3>\n<p><img alt=\"A repeatable website-building system shown step by step\" src=\"https://zerasoftwarestudio.com/images/webdeveloper-template/stages/create-prompt.webp\" /><\/p>\n<h3>Use AI to speed up builds<\/h3>\n<p><img alt=\"An AI-assisted workflow for building premium websites faster\" src=\"https://zerasoftwarestudio.com/images/webdeveloper-template/stages/elevate-value.webp\" /><\/p>\n<h3>Position yourself for $5K+ clients<\/h3>\n<p><img alt=\"A premium website presentation positioned for higher-value clients\" src=\"https://zerasoftwarestudio.com/images/webdeveloper-template/stages/reuse-system.webp\" /><\/p>\n<h2>Start building $5K to $20K websites without coding<\/h2>\n<p>One system. Lifetime access.<\/p>\n<p>$29<\/p>\n<ul>\n<li>✓ Seven modules, welcome and practical resources<\/li>\n<li>✓ Professional layouts and visual styles<\/li>\n<li>✓ Build with AI without coding<\/li>\n<li>✓ Lifetime access and updates Cancel anytime<\/li>\n<\/ul>\n<p>✓ 14-day money-back guarantee<\/p>\n<p>31 video lessons · 7 modules + welcome · 2 hours 46 minutes<\/p>\n<h2>The complete path from AI to premium websites.<\/h2>\n<p>Start with design foundations, build Aven Studio with DevAssistant, then learn outreach, pricing and a repeatable client workflow.<\/p>\n<ol>\n<li>Welcome Welcome<\/li>\n<li>1 What premium means<\/li>\n<li>2 The system behind award-level sites<\/li>\n<li>3 The reference and deconstruction system<\/li>\n<li>4 Your AI build workflow<\/li>\n<li>5 Build the flagship: Aven Studio<\/li>\n<li>6 Getting clients<\/li>\n<li>7 From one site to ten<\/li>\n<\/ol>\n<p>Optional membership Inner Circle coaching is available separately<\/p>\n<p><img alt=\"Creator of the Web Developer Masterclass\" src=\"https://zerasoftwarestudio.com/images/creator.webp\" /><\/p>\n<h2>Built from real projects, not theory.<\/h2>\n<p>We’ve built high-end websites where design directly impacts pricing.<\/p>\n<p>This system comes from that experience—not random tutorials.<\/p>\n<h2>Questions before you get access.<\/h2>\n<p>Clear answers about the system, tools, access, and enrollment.<\/p>\n<p>Do I need to know how to code?<\/p>\n<p>No. The masterclass is designed for ambitious beginners, creators, and service providers. You will learn how to build with AI without coding and how to make the finished website feel custom and valuable.<\/p>\n<p>Will I learn how to create 3D websites?<\/p>\n<p>Yes. Create renders and web-ready 3D assets in DevAssistant, then build a scroll-based 3D hero for Aven Studio. You will learn how to direct the AI using the ideas behind WebGL, GSAP and Three.js. No prior 3D-design experience is needed.<\/p>\n<p>Is this only a website-design masterclass?<\/p>\n<p>No. It shows you how to build with AI, reuse finished sections, make the website look professional, and present it as a valuable service.<\/p>\n<p>How quickly can I complete it?<\/p>\n<p>The course contains 31 video lessons, totalling 2 hours 46 minutes. Work through seven modules plus the welcome lesson at your own pace, allowing extra time to build and practise.<\/p>\n<p>What happens immediately after purchase?<\/p>\n<p>Checkout creates your account and gives you immediate access to the masterclass portal, curriculum, resources, and available updates.<\/p>\n<p>Do I keep access?<\/p>\n<p>The standard enrollment is a one-time purchase with lifetime access and future masterclass updates included.<\/p>\n<p>Your access remains active for as long as your subscription is active. You can cancel at any time.<\/p>\n<p>What is the refund policy?<\/p>\n<p>The published terms include a conditional, action-based 14-day guarantee. Complete the training and required exercises, apply the method to a working website, and submit the evidence described in section A12 within 14 days. Any separate statutory rights still apply.<\/p>"}];
@@ -197,15 +331,33 @@ const chipsEl = document.getElementById('chips');
 const q = document.getElementById('q');
 const overlay = document.getElementById('overlay');
 const controls = document.getElementById('controls');
+const toast = document.getElementById('toast');
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let activeCat = 'All';
+let toastTimer;
 
+/* count-up hero stats */
+document.querySelectorAll('.stat b').forEach(el => {
+  const target = +el.dataset.count;
+  if (reduced) { el.textContent = target; return; }
+  const t0 = performance.now(), dur = 1200;
+  (function tick(t){
+    const p = Math.min((t - t0) / dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+});
+
+/* category chips */
 const cats = ['All', ...Object.keys(CATMETA)];
 const counts = {All: DATA.length};
 DATA.forEach(d => counts[d.cat] = (counts[d.cat]||0)+1);
 cats.forEach(c => {
   const b = document.createElement('button');
+  b.type = 'button';
   b.className = 'chip' + (c==='All' ? ' active' : '');
-  b.innerHTML = c + '<span class="n">' + (counts[c]||0) + '</span>';
+  b.innerHTML = (c==='All' ? '' : '<span class="cdot" style="--ca:' + CATMETA[c].accent + '"></span>') +
+    c + '<span class="n">' + (counts[c]||0) + '</span>';
   b.onclick = () => {
     activeCat = c;
     chipsEl.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
@@ -215,25 +367,39 @@ cats.forEach(c => {
   chipsEl.appendChild(b);
 });
 
+/* reveal on scroll */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('shown'); io.unobserve(e.target); }
-}), {threshold:.06});
+}), {threshold:.05, rootMargin:'0px 0px -4% 0px'});
 
-DATA.forEach(d => {
+/* cards */
+DATA.forEach((d, i) => {
   const el = document.createElement('article');
-  el.className = 'card';
+  el.className = 'card' + (i === 0 ? ' featured' : '');
   el.style.setProperty('--ca', CATMETA[d.cat].accent);
+  if (!reduced) el.style.transitionDelay = Math.min(i % 3, 2) * 60 + 'ms';
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('role', 'button');
+  el.setAttribute('aria-label', 'Open ' + d.title);
   el.innerHTML =
-    '<div class="top"><span class="num">' + d.id + '</span><span class="tag">' + d.cat + '</span></div>' +
+    '<div class="top"><span class="num">' + d.id + ' / ' + CATMETA[d.cat].desc + '</span><span class="tag">' + d.cat + '</span></div>' +
     '<h3>' + d.title + '</h3>' +
     '<p>' + d.summary + '</p>' +
-    '<div class="foot"><span class="from">via ' + d.senders + '</span><span class="open">Read &rarr;</span></div>';
+    '<div class="foot"><span class="from">via ' + d.senders + '</span>' +
+    '<span class="open">Read<span class="arr"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span></div>';
   el.onclick = () => openModal(d);
+  el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(d); } };
+  el.addEventListener('pointermove', e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
   el.dataset.search = (d.title + ' ' + d.summary + ' ' + d.senders + ' ' + d.cat + ' ' + d.source).toLowerCase();
   grid.appendChild(el);
   io.observe(el);
 });
 
+/* filter */
 function applyFilter(){
   const term = q.value.trim().toLowerCase();
   let visible = 0;
@@ -252,10 +418,26 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
 
+/* toast */
+function showToast(){
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+/* modal */
+const modal = overlay.querySelector('.modal');
+const mBar = document.getElementById('m-bar');
+modal.addEventListener('scroll', () => {
+  const max = modal.scrollHeight - modal.clientHeight;
+  mBar.style.width = (max > 0 ? (modal.scrollTop / max) * 100 : 0) + '%';
+}, {passive:true});
+
 function openModal(d){
   const accent = CATMETA[d.cat].accent;
-  document.getElementById('m-tag').textContent = d.cat + ' · ' + d.id;
-  document.getElementById('m-tag').style.setProperty('--ca', accent);
+  const tag = document.getElementById('m-tag');
+  tag.textContent = d.cat + ' · ' + d.id;
+  tag.style.setProperty('--ca', accent);
   document.getElementById('m-title').textContent = d.title;
   document.getElementById('m-meta').innerHTML =
     '<span>via ' + d.senders + '</span>' +
@@ -267,13 +449,16 @@ function openModal(d){
       const code = btn.parentElement.querySelector('pre').innerText;
       navigator.clipboard.writeText(code).then(() => {
         btn.textContent = 'Copied'; btn.classList.add('done');
+        showToast();
         setTimeout(() => { btn.textContent = 'Copy prompt'; btn.classList.remove('done'); }, 1600);
       });
     });
   });
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
-  overlay.querySelector('.modal').scrollTop = 0;
+  modal.scrollTop = 0;
+  mBar.style.width = '0';
+  document.getElementById('close').focus({preventScroll:true});
 }
 function closeModal(){
   overlay.classList.remove('open');
@@ -281,7 +466,9 @@ function closeModal(){
 }
 overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 document.getElementById('close').onclick = closeModal;
+document.getElementById('start-btn').onclick = () => openModal(DATA[0]);
 
+/* sticky toolbar state */
 window.addEventListener('scroll', () => {
   controls.classList.toggle('scrolled', window.scrollY > 10);
 }, {passive:true});
