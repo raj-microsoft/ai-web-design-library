@@ -18,7 +18,7 @@
   --line-soft:rgba(255,255,255,.045);
   --text:#f1f0ea;
   --dim:#a2a19a;
-  --faint:#63625c;
+  --faint:#93928b;
   --accent:#c9bcff;
   --accent-ink:#7c6cff;
   --serif:'Instrument Serif',Georgia,serif;
@@ -71,7 +71,7 @@ body{
 .eyebrow{display:inline-flex;align-items:center;gap:10px;
   font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
   border:1px solid var(--line);border-radius:999px;padding:8px 16px;background:rgba(16,16,19,.6);backdrop-filter:blur(10px)}
-.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 10px rgba(52,211,153,.8);animation:pulse 2.6s ease-in-out infinite}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#34d399}
 @keyframes pulse{50%{opacity:.45}}
 .hero h1{
   margin:28px 0 0;
@@ -261,6 +261,17 @@ footer .start em{font-family:var(--serif);font-style:italic;font-weight:400;font
   html{scroll-behavior:auto}
   .card{opacity:1;transform:none}
 }
+
+/* Photoreal editorial imagery: additive, resource content stays untouched. */
+.hero-film{position:relative;isolation:isolate;margin:32px 0 0;aspect-ratio:16/7;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#141112}
+.hero-film picture,.hero-film img,.hero-film video{display:block;width:100%;height:100%;object-fit:cover}
+.hero-film video{position:absolute;inset:0;opacity:0;transition:opacity .6s}
+.hero-film video.ready{opacity:1}
+.motion-toggle{position:absolute;bottom:14px;right:14px;z-index:2;border:1px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(10,10,11,.85);color:var(--text);padding:10px 15px;font:500 12px var(--sans);cursor:pointer}
+.card-cover{display:block;width:calc(100% + 52px);height:150px;object-fit:cover;margin:-26px -26px 4px;flex:none;border-bottom:1px solid var(--line)}
+footer .image-credit{flex-basis:100%;font:11px/1.8 var(--mono);color:var(--dim)}
+@media(max-width:660px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line-soft)}.hero-film{aspect-ratio:4/3;margin-top:26px}.hero-film img,.hero-film video{object-position:64% center}.motion-toggle{bottom:10px;right:10px}}
+@media(prefers-reduced-motion:reduce){.hero-film video,.motion-toggle{display:none}}
 </style>
 </head>
 <body>
@@ -274,6 +285,11 @@ footer .start em{font-family:var(--serif);font-style:italic;font-weight:400;font
       <span class="row"><span><em>Library.</em></span></span>
     </h1>
     <p class="sub">Every guide, tool and community shared in your DMs this year, on one question: how to make AI-built websites and videos look expensive. Search it, filter it, open a card and steal the prompt.</p>
+    <figure class="hero-film" aria-label="AI-generated designer workspace at night">
+      <picture><source srcset="assets/photoreal/hero-960.webp 960w, assets/photoreal/hero-1600.webp 1600w" sizes="(max-width: 1200px) 92vw, 1104px" type="image/webp"><img src="assets/photoreal/hero-1600.webp" width="1600" height="900" alt="A quiet designer’s desk with a glowing lavender screen, open notebook and warm task lamp." fetchpriority="high"></picture>
+      <video id="hero-video" muted loop playsinline preload="none" poster="assets/photoreal/hero-1600.webp" aria-hidden="true"></video>
+      <button class="motion-toggle" id="motion-toggle" type="button" aria-label="Pause ambient desk animation" hidden>Pause motion</button>
+    </figure>
     <div class="stats">
       <div class="stat"><b data-count="128">0</b><span>DM threads scanned</span></div>
       <div class="stat"><b data-count="94">0</b><span>conversations read</span></div>
@@ -302,6 +318,7 @@ footer .start em{font-family:var(--serif);font-style:italic;font-weight:400;font
       Built as a single self-contained page &middot; press / to search
     </div>
     <button class="start" id="start-btn" type="button">Start with <em>guide 01</em> &rarr;</button>
+    <p class="image-credit">AI-generated imagery · How this was made: ChatGPT image generation; ambient motion created locally with FFmpeg (Gemini Veo unavailable).</p>
   </footer>
 </div>
 
@@ -372,6 +389,13 @@ const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('shown'); io.unobserve(e.target); }
 }), {threshold:.05, rootMargin:'0px 0px -4% 0px'});
 
+/* Category photography is presentation-only; DATA and its order remain unchanged. */
+const categoryPhotos = {
+  Guides: ['guides', 'An open notebook and pencil on a softly lit studio desk.'],
+  Tools: ['tools', 'A keyboard and stylus beside an abstract glowing screen.'],
+  Communities: ['communities', 'An empty creative meeting table with ceramic cups and chairs.'],
+  Leads: ['leads', 'Blank business cards and a notebook beside a brass desk lamp.']
+};
 /* cards */
 DATA.forEach((d, i) => {
   const el = document.createElement('article');
@@ -381,7 +405,9 @@ DATA.forEach((d, i) => {
   el.setAttribute('tabindex', '0');
   el.setAttribute('role', 'button');
   el.setAttribute('aria-label', 'Open ' + d.title);
+  const photo = categoryPhotos[d.cat];
   el.innerHTML =
+    '<img class="card-cover" src="assets/photoreal/' + photo[0] + '-768.webp" srcset="assets/photoreal/' + photo[0] + '-480.webp 480w, assets/photoreal/' + photo[0] + '-768.webp 768w" sizes="(max-width:660px) 90vw, (max-width:1080px) 44vw, 360px" width="768" height="512" loading="lazy" decoding="async" alt="' + photo[1] + '">' +
     '<div class="top"><span class="num">' + d.id + ' / ' + CATMETA[d.cat].desc + '</span><span class="tag">' + d.cat + '</span></div>' +
     '<h3>' + d.title + '</h3>' +
     '<p>' + d.summary + '</p>' +
@@ -472,6 +498,23 @@ document.getElementById('start-btn').onclick = () => openModal(DATA[0]);
 window.addEventListener('scroll', () => {
   controls.classList.toggle('scrolled', window.scrollY > 10);
 }, {passive:true});
+
+/* Do not request motion media for reduced-motion or data-saving visitors. */
+const film = document.getElementById('hero-video');
+const motionButton = document.getElementById('motion-toggle');
+const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
+let motionPaused = false;
+function syncMotion(){
+  if(motionPreference.matches || navigator.connection?.saveData){film.pause();film.classList.remove('ready');motionButton.hidden=true;return;}
+  if(!film.getAttribute('src')) film.src = 'assets/photoreal/hero-' + (innerWidth <= 660 ? 'mobile' : 'desktop') + '.mp4';
+  motionButton.hidden=false;
+  if(!motionPaused && !document.hidden) film.play().then(()=>film.classList.add('ready')).catch(()=>{motionButton.hidden=true;});
+  else film.pause();
+}
+motionButton.onclick=()=>{motionPaused=!motionPaused;motionButton.textContent=motionPaused?'Play motion':'Pause motion';motionButton.setAttribute('aria-label',motionPaused?'Play ambient desk animation':'Pause ambient desk animation');syncMotion();};
+motionPreference.addEventListener('change',syncMotion);
+document.addEventListener('visibilitychange',syncMotion);
+syncMotion();
 </script>
 </body>
 </html>
